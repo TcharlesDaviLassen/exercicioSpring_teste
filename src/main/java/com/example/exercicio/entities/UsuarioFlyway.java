@@ -1,18 +1,18 @@
 package com.example.exercicio.entities;
 
-import com.example.exercicio.Anotations.TableAlias;
-import com.example.exercicio.classUtils.AbstractEntity;
-import com.example.exercicio.classUtils.EntityInterface;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.deser.std.DateDeserializers;
+import com.fasterxml.jackson.databind.ser.std.CalendarSerializer;
+import com.fasterxml.jackson.databind.ser.std.TimeZoneSerializer;
 import jakarta.persistence.*;
-import org.springframework.format.datetime.DateFormatter;
 
 import java.io.Serial;
-import java.io.Serializable;
 import java.util.TimeZone;
 
 @Entity
-//@TableAlias("pess")
-public class Usuario_Flyway extends AbstractEntity<Long> {
+//@TableAlias(value = "pess")
+public class UsuarioFlyway {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -24,12 +24,12 @@ public class Usuario_Flyway extends AbstractEntity<Long> {
     private String nome;
     private String numero;
     private String email;
-    private TimeZone data;
+    private String data;
 
-    public Usuario_Flyway() {
+    public UsuarioFlyway() {
     }
 
-    public Usuario_Flyway(Long id, String nome, String numero, String email, TimeZone data) {
+    public UsuarioFlyway(Long id, String nome, String numero, String email, String data) {
         this.id = id;
         this.nome = nome;
         this.numero = numero;
@@ -37,14 +37,12 @@ public class Usuario_Flyway extends AbstractEntity<Long> {
         this.data = data;
     }
 
-    @Override
     public Long getId() {
-        return super.id;
+        return id;
     }
 
-    @Override
     public void setId(Long id) {
-        super.id = id;
+        this.id = id;
     }
 
     public String getNome() {
@@ -71,11 +69,14 @@ public class Usuario_Flyway extends AbstractEntity<Long> {
         this.email = email;
     }
 
-    public TimeZone getData() {
+//    @Temporal(TemporalType.TIMESTAMP)
+//    @JsonSerialize(using = TimeZoneSerializer.class)
+//    @JsonDeserialize(using = DateDeserializers.TimestampDeserializer.class)
+    public String getData() {
         return data;
     }
 
-    public void setData(TimeZone data) {
+    public void setData(String data) {
         this.data = data;
     }
 }
