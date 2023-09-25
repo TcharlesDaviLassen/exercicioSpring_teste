@@ -1,0 +1,43 @@
+<!--suppress ALL -->
+<!DOCTYPE html>
+<html lang="en">
+    <head th:replace="~{leiauteBase :: head}"></head>
+    <title>Create Usuario</title>
+    <body>
+
+        <h1>Criar usuário</h1>
+
+        <a th:href="@{/usuario/usuarioPage}" th:method="get">
+            <button type="submit" class="btn btn-primary">Voltar
+                <i class="fa fa-home" style="color: white"></i>
+            </button>
+        </a>
+
+        <div style="display:flex; margin-left: 4rem">
+            <form th:action="@{/usuario/create}" method="post">
+
+                <div style="margin-bottom: 1rem;">
+                    <label for="nome" style="display: inline-block; width: 6rem;">Nome:</label>
+                    <input class="labelEdit" type="text" id="nome" name="nome" required>
+                </div>
+
+                <div style="margin-bottom: 1rem;">
+                    <label for="numero" style="display: inline-block; width: 6rem;">Número:</label>
+                    <input class="labelEdit" type="text" id="numero" name="numero"  required>
+                </div>
+
+                <div style="margin-bottom: 1rem;">
+                    <label for="email" style="display: inline-block; width: 6rem;">Email:</label>
+                    <input class="labelEdit" type="text" id="email" name="email" required>
+                </div>
+
+                <div style="margin-bottom: 1rem;">
+                    <label for="data" style="display: inline-block; width: 6rem;">Data:</label>
+                    <input class="labelEdit" type="date" id="data" name="data" required>
+                </div>
+
+                <button type="submit" class="btn btn-success">Salvar</button>
+            </form>
+        </div>
+    </body>
+</html>

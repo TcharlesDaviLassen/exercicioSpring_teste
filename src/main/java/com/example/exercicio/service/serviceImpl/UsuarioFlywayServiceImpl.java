@@ -1,30 +1,42 @@
 package com.example.exercicio.service.serviceImpl;
 
 import com.example.exercicio.entities.UsuarioFlyway;
-import com.example.exercicio.errorsUtils.CustomExceptionHandler;
+import com.example.exercicio.enumType.UsuarioEnumType;
 import com.example.exercicio.errorsUtils.customRuntimeExempion.CustomException;
-import com.example.exercicio.errorsUtils.customRuntimeExempion.ResourceFoundExceptionWithHttpStatus;
 import com.example.exercicio.repository.UsuarioFlywayRepository;
 import com.example.exercicio.service.UsuarioFlywayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import javax.xml.crypto.Data;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
+import java.util.*;
 
 @Service
 public class UsuarioFlywayServiceImpl implements UsuarioFlywayService {
-    private final UsuarioFlywayRepository usuarioRepository;
 
+    private final UsuarioFlywayRepository usuarioRepository;
     @Autowired
     public UsuarioFlywayServiceImpl(UsuarioFlywayRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
+    }
+
+    @Override
+    public Optional<UsuarioFlyway> findById(Long id) {
+        return usuarioRepository.findById(id);
+    }
+
+    @Override
+    public UsuarioFlyway create(UsuarioFlyway usuarioFlyway) {
+        Date dateGMT = new Date();
+        TimeZone timeZone = TimeZone.getTimeZone(TimeZone.getDefault().toZoneId());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        dateFormat.setTimeZone(timeZone);
+        String dataFormatada = dateFormat.format(dateGMT);
+
+        usuarioFlyway.setData(dataFormatada);
+
+        return usuarioRepository.save(usuarioFlyway);
     }
 
     @Override
@@ -55,12 +67,14 @@ public class UsuarioFlywayServiceImpl implements UsuarioFlywayService {
         //        calendar.setTimeZone(timeZone);
         //
         //        // Obtém a data e hora atual com o fuso horário especificado
-//        Calendar dataComFuso = Calendar.getInstance(timeZone);
+        //        Calendar dataComFuso = Calendar.getInstance(timeZone);
 
-        UsuarioFlyway findNomeEmail = usuarioRepository.findByNomeAndEmail(usuarioFlyway.getNome(), usuarioFlyway.getEmail());
+        List<UsuarioFlyway> findNomeEmail = usuarioRepository.findAll();
 
-        if (usuarioFlyway.getNome().equals(findNomeEmail.getNome()) || usuarioFlyway.getEmail().equals(findNomeEmail.getEmail())) {
-            throw new ResourceFoundExceptionWithHttpStatus(HttpStatus.CONFLICT, "Nome e email não podem ser iguais ao que já estão cadastrados");
+        for (int i = 0; i < findNomeEmail.size() ; i++) {
+            if (usuarioFlyway.getNome().equals(findNomeEmail.get(i).getNome()) || usuarioFlyway.getEmail().equals(findNomeEmail.get(i).getEmail())) {
+                throw new CustomException("Nome e email não podem ser iguais ao que já estão cadastrados", HttpStatus.CONFLICT);
+            }
         }
 
         usuarioFlyway.setData(dataFormatada);
@@ -70,5 +84,38 @@ public class UsuarioFlywayServiceImpl implements UsuarioFlywayService {
     @Override
     public List<UsuarioFlyway> findByAll() {
         return usuarioRepository.findAll();
+    }
+
+    @Override
+    public UsuarioFlyway edit(UsuarioFlyway usuarioFlyway) {
+
+        var findUser = usuarioRepository.findById(usuarioFlyway.getId());
+
+        if (findUser.isPresent()) {
+            findUser.get().setNome(usuarioFlyway.getNome());
+            findUser.get().setNumero(usuarioFlyway.getNumero());
+            findUser.get().setEmail(usuarioFlyway.getEmail());
+            findUser.get().setData(usuarioFlyway.getData());
+
+            return usuarioRepository.save(findUser.get());
+        }
+
+        return null;
+    }
+
+
+    @Override
+    public void deleteUser(Long id) {
+        var findIdDelete = usuarioRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("ID do usuário inválido: " + id));
+
+        usuarioRepository.deleteById(findIdDelete.getId());
+
+    }
+
+
+    @Override
+    public List<UsuarioFlyway> findByEnum(UsuarioEnumType usuarioFlyway) {
+        return usuarioRepository.findByEnum(usuarioFlyway);
     }
 }

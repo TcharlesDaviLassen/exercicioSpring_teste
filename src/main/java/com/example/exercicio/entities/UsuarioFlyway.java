@@ -1,5 +1,6 @@
 package com.example.exercicio.entities;
 
+import com.example.exercicio.enumType.UsuarioEnumType;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.deser.std.DateDeserializers;
@@ -25,6 +26,9 @@ public class UsuarioFlyway {
     private String numero;
     private String email;
     private String data;
+
+    @Enumerated(EnumType.STRING)
+    private UsuarioEnumType usuarioEnumTypeEnum;
 
     public UsuarioFlyway() {
     }
@@ -78,5 +82,14 @@ public class UsuarioFlyway {
 
     public void setData(String data) {
         this.data = data;
+    }
+
+
+    public UsuarioEnumType getUsuarioEnumTypeEnum() {
+        return usuarioEnumTypeEnum;
+    }
+
+    public void setUsuarioEnumTypeEnum(UsuarioEnumType usuarioEnumTypeEnum) {
+        this.usuarioEnumTypeEnum = usuarioEnumTypeEnum;
     }
 }
