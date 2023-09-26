@@ -36,6 +36,18 @@
                     <input class="labelEdit" type="date" id="data" name="data" required>
                 </div>
 
+                <div style="margin-bottom: 1rem;">
+                    <label for="tipo" style="display: inline-block; width: 6rem;">EnumUser:</label>
+                        <select style="width: 10rem" id="tipo" name="tipo">
+                            <option value=""></option>
+                            <option th:each="state : ${T(com.example.exercicio.enumType.UsuarioEnumType).values()}"
+                                    th:value="${state.name()}"
+                                    th:selected="${state.name() == T(com.example.exercicio.enumType.UsuarioEnumType)}"
+                                    th:text="${state.description}"
+                            ></option>
+                        </select>
+                </div>
+
                 <button type="submit" class="btn btn-success">Salvar</button>
             </form>
         </div>

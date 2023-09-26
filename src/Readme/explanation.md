@@ -785,3 +785,101 @@ O controlador ExemploController mapeia a rota /exemplo/selecionar-usuario e forn
 A página Thymeleaf selecionar-usuario.html exibe um menu suspenso com os valores do enum UsuarioEnumType. Quando o formulário é enviado, a página exibe o tipo de usuário selecionado.
 
 Acesse http://localhost:8080/exemplo/selecionar-usuario após iniciar a aplicação Spring Boot para testar o exemplo. Você verá o menu suspenso com os tipos de usuário e poderá selecionar um deles para ver a mensagem correspondente na página. Certifique-se de que sua classe UsuarioEnumType e seus valores estejam definidos corretamente.
+
+#
+#
+
+
+<!--&lt;!&ndash;            th:if="${!isUpdate}"&ndash;&gt;-->
+<!--            <div class="form-group " >-->
+<!--&lt;!&ndash;                <label class="col-sm-3 control-label no-padding-right" for="situacao" th:text="#{situacao}"></label>&ndash;&gt;-->
+<!--                <label class="col-sm-3 control-label no-padding-right" for="UsuarioEnumType" th:text="situacao"></label>-->
+<!--                <div class="col-sm-9">-->
+<!--&lt;!&ndash;                    th:field="*{situacao}"&ndash;&gt;-->
+<!--                    <select class="enter-as-tab type-w" id="UsuarioEnumType" required="required">-->
+<!--                        <option value=""></option>-->
+<!--                        <option th:each="state : ${T(com.example.exercicio.enumType.UsuarioEnumType).values()}"-->
+<!--                                th:value="${state.id}"-->
+<!--                                th:selected="${situacao == T(com.example.exercicio.enumType.UsuarioEnumType)}"-->
+<!--                                th:text="${state.description}"></option>-->
+<!--                    </select>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            <div class="form-group">-->
+<!--                <label class="col-sm-3 control-label no-padding-right" for="UsuarioEnumType" th:text="#{situacao}"></label>-->
+<!--                <div class="col-sm-9">-->
+<!--                    <select class="form-control" id="UsuarioEnumType" name="situacao" required="required">-->
+<!--                        <option value=""></option>-->
+<!--                        <option th:each="state : ${T(com.example.exercicio.enumType.UsuarioEnumType).values()}"-->
+<!--                                th:value="${state.id}"-->
+<!--                                th:selected="${usuario.situacao == state}"-->
+<!--                                th:text="${state.description}"></option>-->
+<!--                    </select>-->
+<!--                </div>-->
+<!--            </div>-->
+
+
+<!--            <h1>Selecione um dia da semana:</h1>-->
+<!--            <form th:action="@{/usuario/selecionar-dia}" method="get">-->
+<!--                <select name="diaSelecionado">-->
+<!--                    <option value=""></option>-->
+<!--                    <option th:each="dia : ${diasSemana}"-->
+<!--                            th:value="${dia.id}"-->
+<!--                            th:selected="${diaSelecionado != null and diaSelecionado == dia.id}"-->
+<!--                            th:text="${dia.description}"></option>-->
+<!--                </select>-->
+<!--                <input type="submit" value="Selecionar">-->
+<!--            </form>-->
+<!--            <div th:if="${diaSelecionado != null}">-->
+<!--                <p>Você selecionou o dia <span th:text="${diasSemana[__${diaSelecionado - 1}__].description}"></span>.</p>-->
+<!--            </div>-->
+
+
+<!--            <div class="form-group">-->
+<!--                <label class="col-sm-3 control-label no-padding-right" for="usuarioTeste" th:text="#{usuarioTeste}"></label>-->
+<!--                <div class="col-sm-9 type-w">-->
+<!--                    <select style="width: 6rem" class="enter-as-tab type-w" name="usuarioTeste" id="usuarioTeste">-->
+<!--                        <option value=""></option>-->
+<!--                        <option th:each="state : ${T(com.example.exercicio.enumType.UsuarioEnumType).values()}"-->
+<!--                                th:value="${state}"-->
+<!--                                th:selected="${tipo == T(com.example.exercicio.enumType.UsuarioEnumType)}"-->
+<!--                                th:text="${state.description}">-->
+<!--                        </option>-->
+<!--                    </select>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            <h1>Selecione um tipo de usuário:</h1>-->
+<!--            <form th:action="@{/usuario/selecionarUsuario}" method="get">-->
+
+<!--                <div class="form-group">-->
+<!--                    <label class="col-sm-3 control-label no-padding-right" for="tipo" th:text="#{usuarioTeste}"></label>-->
+<!--                    <div class="col-sm-9 type-w">-->
+<!--                        <select style="width: 6rem" class="enter-as-tab type-w" name="tipo" id="tipo">-->
+<!--                            <option value=""></option>-->
+<!--                            <option th:each="tipo : ${tiposUsuario}"-->
+<!--                                    th:value="${tipo}"-->
+<!--                                    th:selected="${tipo == ${tipo}}"-->
+<!--                                    th:text="${tipo.description}">-->
+<!--                            </option>-->
+<!--                        </select>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <input type="submit" value="Selecionar">-->
+<!--            </form>-->
+<!--            <div th:if="${tipo != null}">-->
+<!--                <p>Você selecionou o tipo de usuário: <span th:text="${tipo.description}"></span>.</p>-->
+<!--            </div>-->
+
+
+<!--    <form th:action="@{/usuario/selecionarUsuario}" method="get">-->
+<!--        <label for="tipo">Selecione o tipo de usuário:</label>-->
+<!--        <select style="width: 10rem" id="tipo" name="tipo">-->
+<!--            <option value=""></option>-->
+<!--            <option th:each="tipo : ${tiposUsuario}"-->
+<!--                    th:value="${tipo.id()}"-->
+<!--                    th:text="${tipo.getDescription()}"></option>-->
+<!--        </select>-->
+<!--        <button type="submit">Selecionar</button>-->
+<!--    </form>-->

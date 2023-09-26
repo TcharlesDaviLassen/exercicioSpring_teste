@@ -32,6 +32,7 @@ public class UsuarioController {
                 model.addAttribute("usuarios", usuariosPorTipo);
                 model.addAttribute("tipo", tipo);
 
+
             } catch (IllegalArgumentException e) {
                 // Trate o caso em que o tipo não é válido
                 model.addAttribute("mensagemErro", "Tipo de usuário inválido");
