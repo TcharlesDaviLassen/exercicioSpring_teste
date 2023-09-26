@@ -14,7 +14,7 @@
         </a>
 
         <div style="display:flex; margin-left: 4rem">
-            <form th:action="@{/usuario/create}" method="post">
+            <form th:action="@{/usuario/create}" th:object="${usuarioCreate}" method="post">
 
                 <div style="margin-bottom: 1rem;">
                     <label for="nome" style="display: inline-block; width: 6rem;">Nome:</label>
@@ -36,17 +36,17 @@
                     <input class="labelEdit" type="date" id="data" name="data" required>
                 </div>
 
+                <!-- Campo EnumUser (Descomente se desejar usar a enumeração) -->
                 <div style="margin-bottom: 1rem;">
                     <label for="tipo" style="display: inline-block; width: 6rem;">EnumUser:</label>
-                        <select style="width: 10rem" id="tipo" name="tipo">
-                            <option value=""></option>
-                            <option th:each="state : ${T(com.example.exercicio.enumType.UsuarioEnumType).values()}"
-                                    th:value="${state.name()}"
-                                    th:selected="${state.name() == T(com.example.exercicio.enumType.UsuarioEnumType)}"
-                                    th:text="${state.description}"
-                            ></option>
-                        </select>
+                    <select style="width: 10rem" id="tipo" name="tipo" th:field="*{usuarioEnumTypeEnum}">
+                        <option value=""></option>
+                        <option th:each="state : ${T(com.example.exercicio.enumType.UsuarioEnumType).values()}"
+                                th:value="${state.name()}"
+                                th:text="${state.description}"></option>
+                    </select>
                 </div>
+
 
                 <button type="submit" class="btn btn-success">Salvar</button>
             </form>
