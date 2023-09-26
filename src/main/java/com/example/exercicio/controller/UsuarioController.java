@@ -15,26 +15,37 @@ import java.util.Optional;
 @RequestMapping("/usuario")
 public class UsuarioController {
 
-    private final UsuarioFlywayServiceImpl serviceUsuarioFlyway;
+    private final UsuarioFlywayServiceImpl usuarioFlywayService;
 
-    public UsuarioController(UsuarioFlywayServiceImpl serviceUsuarioFlyway) {
-        this.serviceUsuarioFlyway = serviceUsuarioFlyway;
+    public UsuarioController(UsuarioFlywayServiceImpl usuarioFlywayService) {
+        this.usuarioFlywayService = usuarioFlywayService;
     }
 
-    @GetMapping("/selecionarUsuario")
-    public String selecionarDia(Model model, @RequestParam(name = "tipo", required = false) String tipo) {
-        UsuarioEnumType usuarioEnumType = UsuarioEnumType.valueOf(tipo.toUpperCase());
 
-        List<UsuarioFlyway> usuarioEnumTypeEnum = serviceUsuarioFlyway.findByEnum(usuarioEnumType);
-        model.addAttribute("tiposUsuario", usuarioEnumTypeEnum);
-        model.addAttribute("tipo", tipo);
+    @GetMapping("/selecionarUsuario")
+    public String selecionarUsuario(Model model, @RequestParam(name = "tipo", required = false) String tipo) {
+        if (tipo != null) {
+            try {
+                UsuarioEnumType usuarioEnumType = UsuarioEnumType.valueOf(tipo.toUpperCase());
+
+                List<UsuarioFlyway> usuariosPorTipo = usuarioFlywayService.findByEnum(usuarioEnumType);
+                model.addAttribute("usuarios", usuariosPorTipo);
+                model.addAttribute("tipo", tipo);
+
+            } catch (IllegalArgumentException e) {
+                // Trate o caso em que o tipo não é válido
+                model.addAttribute("mensagemErro", "Tipo de usuário inválido");
+            }
+        }
+
+        model.addAttribute("tiposUsuario", UsuarioEnumType.values());
 
         return "usuarioPage";
     }
 
     @GetMapping("/usuarioPage")
     public String getUsuarioPage(Model model, UsuarioFlyway usuarioFlyway) {
-        List<UsuarioFlyway> findAllUsuarios = serviceUsuarioFlyway.findByAll();
+        List<UsuarioFlyway> findAllUsuarios = usuarioFlywayService.findByAll();
 
         model.addAttribute("usuarioFlyway", findAllUsuarios);
 
@@ -56,7 +67,7 @@ public class UsuarioController {
     @GetMapping("/edit/{id}")
     public String editPage(@PathVariable(name = "id") Long id, Model model) {
 
-        Optional<UsuarioFlyway> editUsuarios = serviceUsuarioFlyway.findById(id);
+        Optional<UsuarioFlyway> editUsuarios = usuarioFlywayService.findById(id);
 
         if(editUsuarios.isEmpty()) {
             return "pageNotFound";
@@ -73,7 +84,7 @@ public class UsuarioController {
 //    @ResponseBody
     @PostMapping("/edit/{id}")
     public String edit(@PathVariable( name = "id") Long id, @Valid UsuarioFlyway usuarioFlyway) {
-        var editUser =  serviceUsuarioFlyway.edit(usuarioFlyway);
+        var editUser =  usuarioFlywayService.edit(usuarioFlyway);
         //        return ResponseEntity.ok().body(editUser);
 
         return "redirect:/usuario/usuarioPage";
@@ -89,19 +100,15 @@ public class UsuarioController {
 
     @PostMapping("/create")
     public String criarRegistro(@ModelAttribute("usuarioCreate") UsuarioFlyway usuarioFlyway) {
-        serviceUsuarioFlyway.create(usuarioFlyway);
+        usuarioFlywayService.create(usuarioFlyway);
 
         return "redirect:/usuario/usuarioPage";
     }
 
     @GetMapping("/delete/{id}")
     public String deleteGetRegistro(@PathVariable(name = "id") Long id) {
-        serviceUsuarioFlyway.deleteUser(id);
+        usuarioFlywayService.deleteUser(id);
 
         return "redirect:/usuario/usuarioPage";
     }
-
-
-
-
 }

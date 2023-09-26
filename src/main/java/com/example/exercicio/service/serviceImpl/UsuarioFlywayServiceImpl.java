@@ -113,9 +113,8 @@ public class UsuarioFlywayServiceImpl implements UsuarioFlywayService {
 
     }
 
-
     @Override
     public List<UsuarioFlyway> findByEnum(UsuarioEnumType usuarioFlyway) {
-        return usuarioRepository.findByEnum(usuarioFlyway);
+        return usuarioRepository.findByUsuarioEnumTypeEnum(usuarioFlyway);
     }
 }

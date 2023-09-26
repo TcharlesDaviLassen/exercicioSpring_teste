@@ -78,3 +78,49 @@
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 1);
 }
+
+.error {
+    color: red;
+}
+
+select {
+    border-radius: 10px; /* Bordas arredondadas para a caixa de seleção */
+    padding: 5px; /* Espaçamento interno para um visual mais agradável */
+    width: 200px; /* Largura da caixa de seleção */
+   /* appearance: none; */ /* Remove a aparência padrão do sistema */
+    outline: none; /* Remove o contorno padrão no foco */
+    cursor: pointer; /* Altera o cursor para indicar uma interação clicável */
+}
+
+/* Estilo para o dropdown (quando ativado) */
+select:focus {
+    border-radius: 10px; /* Bordas arredondadas para o dropdown */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Adiciona uma sombra suave */
+}
+
+/* Estilo para o dropdown personalizado */
+.custom-options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    max-height: 150px;
+    overflow-y: auto;
+    background-color: #fff;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    display: none;
+}
+
+/* Estilo para as opções */
+.custom-option {
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: background-color 0.2s;
+}
+
+/* Estilo para as opções quando hover */
+.custom-option:hover {
+    background-color: #f0f0f0;
+}

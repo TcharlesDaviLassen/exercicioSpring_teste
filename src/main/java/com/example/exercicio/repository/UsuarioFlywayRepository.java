@@ -3,6 +3,8 @@ package com.example.exercicio.repository;
 import com.example.exercicio.entities.UsuarioFlyway;
 import com.example.exercicio.enumType.UsuarioEnumType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,6 +15,8 @@ public interface UsuarioFlywayRepository extends JpaRepository<UsuarioFlyway, Lo
 
     UsuarioFlyway findByNomeAndEmail(String nome, String email);
 
-    List<UsuarioFlyway> findByEnum(UsuarioEnumType funcionarioSetor);
+//    @Query(value = "SELECT * FROM usuario_flyway WHERE usuarioEnumTypeEnum = :tipo", nativeQuery = true)
+//    List<UsuarioFlyway> findByUsuarioEnumTypeEnum(@Param("tipo") UsuarioEnumType funcionarioSetor);
+    List<UsuarioFlyway> findByUsuarioEnumTypeEnum(UsuarioEnumType funcionarioSetor);
 
 }

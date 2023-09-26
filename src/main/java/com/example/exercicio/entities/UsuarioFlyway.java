@@ -9,11 +9,12 @@ import com.fasterxml.jackson.databind.ser.std.TimeZoneSerializer;
 import jakarta.persistence.*;
 
 import java.io.Serial;
+import java.io.Serializable;
 import java.util.TimeZone;
 
 @Entity
 //@TableAlias(value = "pess")
-public class UsuarioFlyway {
+public class UsuarioFlyway implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -27,18 +28,21 @@ public class UsuarioFlyway {
     private String email;
     private String data;
 
-    @Enumerated(EnumType.STRING)
+    @Column(name = "usuario_enum_type_enum", columnDefinition = "char")
+    @Enumerated(value = EnumType.STRING)
     private UsuarioEnumType usuarioEnumTypeEnum;
 
     public UsuarioFlyway() {
     }
 
-    public UsuarioFlyway(Long id, String nome, String numero, String email, String data) {
+
+    public UsuarioFlyway(Long id, String nome, String numero, String email, String data, UsuarioEnumType usuarioEnumTypeEnum) {
         this.id = id;
         this.nome = nome;
         this.numero = numero;
         this.email = email;
         this.data = data;
+        this.usuarioEnumTypeEnum = usuarioEnumTypeEnum;
     }
 
     public Long getId() {
@@ -73,9 +77,9 @@ public class UsuarioFlyway {
         this.email = email;
     }
 
-//    @Temporal(TemporalType.TIMESTAMP)
-//    @JsonSerialize(using = TimeZoneSerializer.class)
-//    @JsonDeserialize(using = DateDeserializers.TimestampDeserializer.class)
+    //    @Temporal(TemporalType.TIMESTAMP)
+    //    @JsonSerialize(using = TimeZoneSerializer.class)
+    //    @JsonDeserialize(using = DateDeserializers.TimestampDeserializer.class)
     public String getData() {
         return data;
     }
@@ -83,7 +87,6 @@ public class UsuarioFlyway {
     public void setData(String data) {
         this.data = data;
     }
-
 
     public UsuarioEnumType getUsuarioEnumTypeEnum() {
         return usuarioEnumTypeEnum;
