@@ -1,24 +1,31 @@
 package com.example.exercicio.service.serviceImpl;
 
+import com.example.exercicio.DTO.UsuarioDTO;
 import com.example.exercicio.entities.UsuarioFlyway;
 import com.example.exercicio.enumType.UsuarioEnumType;
 import com.example.exercicio.errorsUtils.customRuntimeExempion.CustomException;
 import com.example.exercicio.repository.UsuarioFlywayRepository;
+import com.example.exercicio.repository.repositoryDAOImpl.UsuarioFlywayRepositoryDAOImpl;
 import com.example.exercicio.service.UsuarioFlywayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.TimeZone;
 
 @Service
 public class UsuarioFlywayServiceImpl implements UsuarioFlywayService {
 
     private final UsuarioFlywayRepository usuarioRepository;
+    private final UsuarioFlywayRepositoryDAOImpl usuarioFlywayRepositoryDAO;
     @Autowired
-    public UsuarioFlywayServiceImpl(UsuarioFlywayRepository usuarioRepository) {
+    public UsuarioFlywayServiceImpl(UsuarioFlywayRepository usuarioRepository, UsuarioFlywayRepositoryDAOImpl usuarioFlywayRepositoryDAO) {
         this.usuarioRepository = usuarioRepository;
+        this.usuarioFlywayRepositoryDAO = usuarioFlywayRepositoryDAO;
     }
 
     @Override
@@ -36,8 +43,18 @@ public class UsuarioFlywayServiceImpl implements UsuarioFlywayService {
 
         usuarioFlyway.setData(dataFormatada);
 
+        List<UsuarioFlyway> findNomeEmail = usuarioRepository.findAll();
+
+        for (int i = 0; i < findNomeEmail.size() ; i++) {
+            if (usuarioFlyway.getNome().equals(findNomeEmail.get(i).getNome()) || usuarioFlyway.getEmail().equals(findNomeEmail.get(i).getEmail())) {
+                throw new IllegalArgumentException("Nome e email não podem ser iguais ao que já estão cadastrados");
+            }
+        }
+
         return usuarioRepository.save(usuarioFlyway);
     }
+
+
 
     @Override
     public UsuarioFlyway salvarUsuarioFlyway(UsuarioFlyway usuarioFlyway) {
@@ -117,4 +134,9 @@ public class UsuarioFlywayServiceImpl implements UsuarioFlywayService {
     public List<UsuarioFlyway> findByEnum(UsuarioEnumType usuarioFlyway) {
         return usuarioRepository.findByUsuarioEnumTypeEnum(usuarioFlyway);
     }
+
+    public List<UsuarioFlyway> filtrarUsuarios(UsuarioFlyway filtro) {
+        return usuarioFlywayRepositoryDAO.filtrarUsuarios(filtro);
+    }
+
 }

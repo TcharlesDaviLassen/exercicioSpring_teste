@@ -1,5 +1,10 @@
 package com.example.exercicio.enumType;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
+
 public enum UsuarioEnumType implements RequireTypes {
 
 //    NOME("N", "NOME"),
@@ -45,4 +50,16 @@ public enum UsuarioEnumType implements RequireTypes {
         }
         throw new IllegalArgumentException("Valor inválido para UsuarioEnumType: " + id);
     }
+
+//    public UsuarioEnumType parseJsonToEnum(String json) {
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+//
+//        try {
+//            return objectMapper.readValue(json, UsuarioEnumType.class);
+//        } catch (IOException e) {
+//            // Trate a exceção aqui e defina um valor padrão, se necessário
+//            return UsuarioEnumType.N; // Substitua pelo valor padrão desejado
+//        }
+//    }
 }
