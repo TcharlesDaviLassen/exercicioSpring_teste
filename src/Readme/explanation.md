@@ -1064,3 +1064,34 @@ Neste exemplo, a Thymeleaf é usada para fazer o binding de dados entre o objeto
 <!--        <button type="submit">Selecionar</button>-->
 <!--    </form>-->
 
+
+<!--            <h1>Selecionar Usuário</h1>-->
+<!--            <form th:action="@{/usuario/selecionarUsuario}" method="get">-->
+<!--                <label for="tipo">Selecione o tipo de usuário:</label>-->
+<!--                <select style="width: 10rem" id="tipo" name="tipo">-->
+<!--                    <option value=""></option>-->
+<!--                    <option th:each="state : ${T(com.example.exercicio.enumType.UsuarioEnumType).values()}"-->
+<!--                            th:value="${state.name()}"-->
+<!--                            th:selected="${tipo == T(com.example.exercicio.enumType.UsuarioEnumType)}"-->
+<!--                            th:text="${state.description}"-->
+<!--                    ></option>-->
+<!--                </select>-->
+<!--                <button class="btn btn-primary" type="submit">-->
+<!--                    Selecionar-->
+<!--                </button>-->
+<!--            </form>-->
+
+<!--            <div th:if="${mensagemErro != null}" th:text="${mensagemErro}" class="error"></div>-->
+
+<!--            <table th:if="${usuarios != null}" border="1">-->
+<!--                <tr>-->
+<!--                    <th>ID</th>-->
+<!--                    <th>Nome</th>-->
+<!--                    <th>Tipo</th>-->
+<!--                </tr>-->
+<!--                <tr th:each="usuario : ${usuarios}">-->
+<!--                    <td th:text="${usuario.id}"></td>-->
+<!--                    <td th:text="${usuario.nome}"></td>-->
+<!--                    <td th:text="${usuario.getUsuarioEnumTypeEnum()}"></td>-->
+<!--                </tr>-->
+<!--            </table>-->

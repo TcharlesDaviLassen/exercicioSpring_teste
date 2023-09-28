@@ -3,33 +3,32 @@
     <html>
 <head th:replace="~{leiauteBase :: head}"></head>
 <title>Edit usuario</title>
-
     <body>
-    <h1>Editar Registro</h1>
+        <h1>Editar Registro</h1>
 
-        <form th:action="@{/usuario/edit/{id}(id=${editUsuarios.id})}" method="post">
+        <form th:action="@{/usuario/edit/{id}(id=${editUsuarios.id})}" th:object="${editUsuarios}" method="post">
 
-        <!--            <div style="flex: 0 0 calc(50% - 1rem); margin: 0.5rem;">-->
-        <!--                <label>Nome:</label>-->
-        <!--                <input type="text" name="name" th:value="${editUsuarios.nome}" required>-->
-        <!--            </div>-->
-        <!--       -->
-        <!--            <div style="flex: 0 0 calc(50% - 1rem); margin: 0.5rem;">-->
-        <!--                <label>Número:</label>-->
-        <!--                <input type="text" name="name" th:value="${editUsuarios.numero}" required>-->
-        <!--            </div>-->
+            <!--            <div style="flex: 0 0 calc(50% - 1rem); margin: 0.5rem;">-->
+            <!--                <label>Nome:</label>-->
+            <!--                <input type="text" name="name" th:value="${editUsuarios.nome}" required>-->
+            <!--            </div>-->
+            <!--       -->
+            <!--            <div style="flex: 0 0 calc(50% - 1rem); margin: 0.5rem;">-->
+            <!--                <label>Número:</label>-->
+            <!--                <input type="text" name="name" th:value="${editUsuarios.numero}" required>-->
+            <!--            </div>-->
 
-        <!--            <div style="flex: 0 0 calc(50% - 1rem); margin: 0.5rem;">-->
-        <!--                <label>Email:</label>-->
-        <!--                <input type="text" name="name" th:value="${editUsuarios.email}" required>-->
-        <!--                <br>-->
-        <!--            </div>-->
+            <!--            <div style="flex: 0 0 calc(50% - 1rem); margin: 0.5rem;">-->
+            <!--                <label>Email:</label>-->
+            <!--                <input type="text" name="name" th:value="${editUsuarios.email}" required>-->
+            <!--                <br>-->
+            <!--            </div>-->
 
-        <!--            <div style="flex: 0 0 calc(50% - 1rem); margin: 0.5rem;">-->
-        <!--                <label>data:</label>-->
-        <!--                <input type="text" name="name" th:value="${editUsuarios.data}" required>-->
-        <!--                <br>-->
-        <!--            </div>-->
+            <!--            <div style="flex: 0 0 calc(50% - 1rem); margin: 0.5rem;">-->
+            <!--                <label>data:</label>-->
+            <!--                <input type="text" name="name" th:value="${editUsuarios.data}" required>-->
+            <!--                <br>-->
+            <!--            </div>-->
 
             <div style="margin-bottom: 1rem;">
                 <label for="nome" style="display: inline-block; width: 6rem;">Nome:</label>
@@ -49,6 +48,16 @@
             <div style="margin-bottom: 1rem;">
                 <label for="data" style="display: inline-block; width: 6rem;">Data:</label>
                 <input class="labelEdit" type="text" id="data" name="data" th:value="${editUsuarios.data}" required>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <label for="tipo" style="display: inline-block; width: 6rem;">EnumUser:</label>
+                <select style="width: 10rem" id="tipo" name="tipo" th:field="*{usuarioEnumTypeEnum}">
+                    <option value=""></option>
+                    <option th:each="state : ${T(com.example.exercicio.enumType.UsuarioEnumType).values()}"
+                            th:value="${state.name()}"
+                            th:text="${state.description}"></option>
+                </select>
             </div>
 
             <button type="submit" class="btn btn-info">Salvar</button>

@@ -38,7 +38,69 @@ async function performSearch() {
       }
       return response.json();
     })
-    .then(usuariosFiltrados => {
+    .then(dadosDeRetornoCallback => {
+
+      // const tableRender = document.getElementById("tableRender");
+      const rowses = dadosDeRetornoCallback.length;
+
+      if (rowses === 0) {
+        tableRender.innerHTML = "<p>Nenhum resultado encontrado.</p>";
+        // const tableRenders = document.getElementById("tableRender");
+        // tableRenders.style.display = "none";
+        if (filtro.nome === null || filtro.nome === "") {
+          const tableRender = document.getElementById("tableRender");
+          tableRender.style.display = "none";
+        }
+
+
+      } else {
+
+        // Limpe a tabela de renderização
+        const tableRender = document.getElementById("tableRender");
+        tableRender.innerHTML = "";
+
+        // Crie uma nova tabela
+        const newTable = document.createElement("table");
+        newTable.classList.add("table", "table-striped", "table-bordered", "custom-table", "cunstom-render");
+
+        // Crie o cabeçalho da nova tabela
+        const thead = document.createElement("thead");
+        thead.classList.add("thead-dark", "custom-thead");
+        const headerRow = document.createElement("tr");
+        headerRow.innerHTML =
+          `
+          <th>Nome</th>
+          <th>Email</th>
+        `;
+        thead.appendChild(headerRow);
+        newTable.appendChild(thead);
+
+        // Crie o corpo da nova tabela e preencha com os resultados
+        const tbody = document.createElement("tbody");
+        for (const usuario of dadosDeRetornoCallback) {
+          const row = document.createElement("tr");
+          const cell1 = document.createElement("td");
+          cell1.textContent = usuario.nome;
+          const cell2 = document.createElement("td");
+          cell2.textContent = usuario.email;
+          row.appendChild(cell1);
+          row.appendChild(cell2);
+          tbody.appendChild(row);
+        }
+        newTable.appendChild(tbody);
+
+        // Limpe a tabela de renderização e adicione a nova tabela
+        tableRender.innerHTML = "";
+        // Adicione a nova tabela à área de renderização
+        tableRender.appendChild(newTable);
+
+        // Oculte a tabela original
+        // const originalTable = document.getElementById("bodyTable");
+        // originalTable.style.display = "none";
+
+
+      }
+
       for (let i = 1; i < rows.length; i++) { // Começando em 1 para pular o cabeçalho
         const row = rows[i];
         const cells = row.getElementsByTagName("td");
@@ -60,7 +122,14 @@ async function performSearch() {
         } else {
           row.style.display = "none";
         }
-         console.info("USER => ", usuariosFiltrados)
+
+        // if ( selectTerm === "") {
+        //   const tableRenders = document.querySelector(".cunstom-render");
+        //   tableRenders.style.display = "none";
+        // }
+
+        //        if (rowContainsSearchTerm || selectTerm === "" || row.querySelector(".tipo").textContent === selectTerm) {
+        //        }
       }
     })
     .catch(error => {
@@ -71,7 +140,7 @@ async function performSearch() {
 // Adicione ouvintes de eventos aos campos de filtro e ao campo select
 document.querySelectorAll(".filtroInput").forEach(input => {
   input.addEventListener("input", performSearch);
-  console.info("input => ", input)
+  // console.info("input => ", input)
 });
 document.getElementById("filtroTipo").addEventListener("change", performSearch);
 

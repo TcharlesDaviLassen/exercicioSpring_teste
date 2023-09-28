@@ -1,5 +1,6 @@
 package com.example.exercicio.controller;
 
+import com.example.exercicio.DTO.User;
 import com.example.exercicio.DTO.UsuarioDTO;
 import com.example.exercicio.entities.UsuarioFlyway;
 import com.example.exercicio.enumType.UsuarioEnumType;
@@ -25,7 +26,6 @@ public class UsuarioController {
         this.usuarioFlywayService = usuarioFlywayService;
     }
 
-
     @GetMapping("/selecionarUsuario")
     public String selecionarUsuario(Model model, @RequestParam(name = "tipo", required = false) String tipo) {
         if (tipo != null) {
@@ -35,8 +35,6 @@ public class UsuarioController {
                 List<UsuarioFlyway> usuariosPorTipo = usuarioFlywayService.findByEnum(usuarioEnumType);
                 model.addAttribute("usuarios", usuariosPorTipo);
                 model.addAttribute("tipo", tipo);
-
-
             } catch (IllegalArgumentException e) {
                 // Trate o caso em que o tipo não é válido
                 model.addAttribute("mensagemErro", "Tipo de usuário inválido");
@@ -48,25 +46,27 @@ public class UsuarioController {
         return "usuarioPage";
     }
 
-
-//    @GetMapping("/usuarios")
-//    public String mostrarPagina(Model model) {
-//        // Carregue os dados dos usuários e adicione-os ao modelo
-//        List<Usuario> usuarios = usuarioService.buscarTodosUsuarios();
-//        model.addAttribute("usuarios", usuarios);
-//        return "pagina_usuarios";
-//    }
-
     @GetMapping("/usuarioPage")
     public String getUsuarioPage(Model model, UsuarioFlyway usuarioFlyway) {
-        Integer[] leng = new Integer[5];
         List<UsuarioFlyway> findAllUsuarios = usuarioFlywayService.findByAll();
 
         model.addAttribute("usuarioFlyway", findAllUsuarios);
-        model.addAttribute("usuarioFlywayTh", leng);
         model.addAttribute("usuarioCreate", new UsuarioFlyway());
 
         return "usuarioPage";
+    }
+
+
+    @GetMapping("/inputs")
+    public String showForm(Model model) {
+        model.addAttribute("user", new User());
+        return "inputsExample";
+    }
+
+    @PostMapping("/showForm")
+    public String processForm(User user) {
+        // Aqui você pode processar os dados do usuário (por exemplo, salvar no banco de dados)
+        return "redirect:/form";
     }
 
     @RequestMapping(value = "/filtrar",
@@ -79,23 +79,22 @@ public class UsuarioController {
         if (filtro.getUsuarioEnumTypeEnum() != null) {
             return usuarioFlywayService.findByEnum(filtro.getUsuarioEnumTypeEnum());
         } else {
-                        return usuarioFlywayService.findByAll();
-//            return usuarioFlywayService.filtrarUsuarios(filtro);
+//            return usuarioFlywayService.findByAll();
+             return usuarioFlywayService.filtrarUsuarios(filtro);
         }
-        //        // Implemente a lógica de filtragem com base nos critérios do filtro
+
+        // Implemente a lógica de filtragem com base nos critérios do filtro
         //        try {
         //            UsuarioEnumType tipo = UsuarioEnumType.valueOf(filtro.getUsuarioEnumTypeEnum().name());
-        //
-        //            // Se o valor do enum for válido, você pode prosseguir com o processamento
-        //            // Aqui você pode fazer o que for necessário com o usuário e o tipo
-        //
-        ////            return ResponseEntity.ok("Usuário cadastrado: Nome = " + filtro.getNome() + ", Tipo = " + tipo.name());
-        //        } catch (IllegalArgumentException e) {
-        //            // Se o valor do enum for inválido, retorne uma resposta de erro
-        ////            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Valor de tipo inválido: " + usuario.getTipo());
-        //        }
 
-        //        return usuarioFlywayService.filtrarUsuarios(filtro);
+                    // Se o valor do enum for válido, você pode prosseguir com o processamento
+                    // Aqui você pode fazer o que for necessário com o usuário e o tipo
+
+        //            return ResponseEntity.ok("Usuário cadastrado: Nome = " + filtro.getNome() + ", Tipo = " + tipo.name());
+        //        } catch (IllegalArgumentException e) {
+                    // Se o valor do enum for inválido, retorne uma resposta de erro
+        //            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Valor de tipo inválido: " + usuario.getTipo());
+        //        }
     }
 
 
@@ -113,33 +112,31 @@ public class UsuarioController {
 
     @GetMapping("/edit/{id}")
     public String editPage(@PathVariable(name = "id") Long id, Model model) {
-
         Optional<UsuarioFlyway> editUsuarios = usuarioFlywayService.findById(id);
 
         if(editUsuarios.isEmpty()) {
             return "pageNotFound";
         } else {
+//            model.addAttribute("usuarioEdit", editUsuarios);
             model.addAttribute("editUsuarios", editUsuarios.get());
             return "usuarioEditPage";
         }
     }
 
-//    @RequestMapping(value = "/edit/{id}",
-//            method = RequestMethod.POST,
-//            consumes = MediaType.APPLICATION_JSON_VALUE
-//    )
-//    @ResponseBody
+    //    @RequestMapping(value = "/edit/{id}",
+    //            method = RequestMethod.POST,
+    //            consumes = MediaType.APPLICATION_JSON_VALUE
+    //    )
+    //    @ResponseBody
     @PostMapping("/edit/{id}")
     public String edit(@PathVariable( name = "id") Long id, @Valid UsuarioFlyway usuarioFlyway) {
         var editUser =  usuarioFlywayService.edit(usuarioFlyway);
-        //        return ResponseEntity.ok().body(editUser);
 
         return "redirect:/usuario/usuarioPage";
     }
 
     @GetMapping("/create")
     public String usuarioCreatePage(Model model) {
-
         model.addAttribute("usuarioCreate", new UsuarioFlyway());
 
         return "usuarioCreatePage";

@@ -466,7 +466,6 @@ Espero que este exemplo atenda às suas necessidades.
 #
 #
 
-
 ```javascript
 // Função para realizar a chamada AJAX quando os campos de filtro ou o campo select forem alterados
 async function performSearch() {
@@ -544,7 +543,15 @@ async function performSearch() {
 document.querySelectorAll(".filtroInput").forEach(input => {
   input.addEventListener("input", performSearch);
 });
-```
 document.getElementById("filtroTipo").addEventListener("change", performSearch);
+```
 Neste exemplo, a tabela é exibida ou ocultada com base nos resultados da pesquisa. Se houver resultados, a tabela será exibida e preenchida com os resultados; caso contrário, a tabela será ocultada. Certifique-se de que o ID da tabela (tabela) corresponda ao ID da tabela em seu HTML.
+
+
+#
+#
+
+
+
+
 

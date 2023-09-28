@@ -24,38 +24,38 @@ public class UsuarioFlywayRepositoryDAOImpl {
     private EntityManager entityManager;
 
     public List<UsuarioFlyway> filtrarUsuarios(UsuarioFlyway filtro) {
-//        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-//        CriteriaQuery<UsuarioFlyway> criteriaQuery = criteriaBuilder.createQuery(UsuarioFlyway.class);
-//        Root<UsuarioFlyway> root = criteriaQuery.from(UsuarioFlyway.class);
-//
-//        List<Predicate> predicates = new ArrayList<>();
-//
-//        // Adicione critérios de filtro conforme necessário
-//        if (filtro.getNome() != null && !filtro.getNome().isEmpty()) {
-//            predicates.add((Predicate) criteriaBuilder.like(root.get("nome"), "%" + filtro.getNome() + "%"));
-//        }
-//
-//        if (filtro.getNumero() != null && !filtro.getNumero().isEmpty()) {
-//            predicates.add((Predicate) criteriaBuilder.like(root.get("numero"), "%" + filtro.getNumero() + "%"));
-//        }
-//
-//        if (filtro.getEmail() != null && !filtro.getEmail().isEmpty()) {
-//            predicates.add((Predicate) criteriaBuilder.like(root.get("email"), "%" + filtro.getEmail() + "%"));
-//        }
-//
-//        if (filtro.getData() != null && !filtro.getData().isEmpty()) {
-//            predicates.add((Predicate) criteriaBuilder.like(root.get("data"), "%" + filtro.getData() + "%"));
-//        }
-//
-//        if (filtro.getUsuarioEnumTypeEnum() != null && filtro.getUsuarioEnumTypeEnum().describeConstable().isPresent()) {
-//            predicates.add((Predicate) criteriaBuilder.like(root.get("usuarioEnumTypeEnum"), "%" + filtro.getUsuarioEnumTypeEnum() + "%"));
-//        }
-//
-//        // Combine os predicados com uma condição "AND"
-//        //  criteriaQuery.where(predicates.toArray(new Predicate[0]));
-//
-//        // Execute a consulta
-//        return entityManager.createQuery(criteriaQuery).getResultList();
+        //        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        //        CriteriaQuery<UsuarioFlyway> criteriaQuery = criteriaBuilder.createQuery(UsuarioFlyway.class);
+        //        Root<UsuarioFlyway> root = criteriaQuery.from(UsuarioFlyway.class);
+        //
+        //        List<Predicate> predicates = new ArrayList<>();
+        //
+        //        // Adicione critérios de filtro conforme necessário
+        //        if (filtro.getNome() != null && !filtro.getNome().isEmpty()) {
+        //            predicates.add((Predicate) criteriaBuilder.like(root.get("nome"), "%" + filtro.getNome() + "%"));
+        //        }
+        //
+        //        if (filtro.getNumero() != null && !filtro.getNumero().isEmpty()) {
+        //            predicates.add((Predicate) criteriaBuilder.like(root.get("numero"), "%" + filtro.getNumero() + "%"));
+        //        }
+        //
+        //        if (filtro.getEmail() != null && !filtro.getEmail().isEmpty()) {
+        //            predicates.add((Predicate) criteriaBuilder.like(root.get("email"), "%" + filtro.getEmail() + "%"));
+        //        }
+        //
+        //        if (filtro.getData() != null && !filtro.getData().isEmpty()) {
+        //            predicates.add((Predicate) criteriaBuilder.like(root.get("data"), "%" + filtro.getData() + "%"));
+        //        }
+        //
+        //        if (filtro.getUsuarioEnumTypeEnum() != null && filtro.getUsuarioEnumTypeEnum().describeConstable().isPresent()) {
+        //            predicates.add((Predicate) criteriaBuilder.like(root.get("usuarioEnumTypeEnum"), "%" + filtro.getUsuarioEnumTypeEnum() + "%"));
+        //        }
+        //
+        //        // Combine os predicados com uma condição "AND"
+        //        //  criteriaQuery.where(predicates.toArray(new Predicate[0]));
+        //
+        //        // Execute a consulta
+        //        return entityManager.createQuery(criteriaQuery).getResultList();
 
 
         StringBuilder queryBuilder = new StringBuilder("SELECT u FROM UsuarioFlyway u WHERE 1=1");

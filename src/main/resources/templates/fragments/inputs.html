@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+   
+    <div th:fragment="textWS(field, label, required, readonly, size)">
+        <div class="form-group">
+            <label class="col-sm-3 control-label no-padding-right"
+                th:for="${field}" th:text="#{__${label}__}"></label>
+            <div class="col-sm-9 desc-w">
+                <input type="text"
+                    th:class="${readonly} ? 'ignore-focus desc-w' : 'enter-as-tab desc-w'"
+                    th:field="*{__${field}__}"
+                    th:readonly="${readonly} ? 'readonly' :null"
+                    th:required="${required} ? 'required' : null"
+                    th:maxlength="${size}" 
+                />
+            </div>
+        </div>
+    </div>
+
+    <div th:fragment="textWSU(field, label, required, readonly, size)">
+        <div class="form-group">
+            <label class="col-sm-3 control-label no-padding-right"
+                th:for="${field}" th:text="#{__${label}__}"></label>
+            <div class="col-sm-9 desc-w">
+                <input type="text"
+                    th:class="${readonly} ? 'ignore-focus desc-w' : 'enter-as-tab desc-w'"
+                    th:name="${field}" th:id="${field}"
+                    th:readonly="${readonly} ? 'readonly' :null"
+                    th:required="${required} ? 'required' : null"
+                    th:maxlength="${size}" 
+                />
+            </div>
+        </div>
+    </div>
+</html>

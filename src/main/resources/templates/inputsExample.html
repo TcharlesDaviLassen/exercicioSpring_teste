@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulário de Usuário</title>
+</head>
+    <body>
+        <form th:object="${user}" method="post">
+
+            <!-- Usando o fragmento textWS para campos não editáveis -->
+            <div th:replace="~{fragments/inputs :: textWS('name', 'name', true, true, 50)}"></div>
+            <div th:replace="~{fragments/inputs :: textWS('email', 'email', true, true, 100)}"></div>
+
+            <!-- Usando o fragmento textWSU para campos editáveis -->
+            <div th:replace="~{fragments/inputs :: textWSU('phone', 'phone', true, false, 15)}"></div>
+            <div th:replace="~{fragments/inputs :: textWSU('address', 'address', true, false, 200)}"></div>
+
+            <!-- Botão de envio -->
+            <button type="submit">Enviar</button>
+        </form>
+    </body>
+</html>

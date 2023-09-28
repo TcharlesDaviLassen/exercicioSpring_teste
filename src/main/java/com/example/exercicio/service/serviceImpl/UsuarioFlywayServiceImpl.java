@@ -113,6 +113,7 @@ public class UsuarioFlywayServiceImpl implements UsuarioFlywayService {
             findUser.get().setNumero(usuarioFlyway.getNumero());
             findUser.get().setEmail(usuarioFlyway.getEmail());
             findUser.get().setData(usuarioFlyway.getData());
+            findUser.get().setUsuarioEnumTypeEnum(usuarioFlyway.getUsuarioEnumTypeEnum());
 
             return usuarioRepository.save(findUser.get());
         }
