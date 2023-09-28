@@ -9,6 +9,7 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-@Configuration
+@Repository
 public class UsuarioFlywayRepositoryDAOImpl {
 
     @Autowired
@@ -82,8 +83,8 @@ public class UsuarioFlywayRepositoryDAOImpl {
         }
 
         if (filtro.getUsuarioEnumTypeEnum() != null && !filtro.getUsuarioEnumTypeEnum().name().isEmpty()) {
-            queryBuilder.append(" AND u.usuarioEnumTypeEnum LIKE :usuarioEnumTypeEnum");
-            parametros.put("usuarioEnumTypeEnum", "%" + filtro.getUsuarioEnumTypeEnum() + "%");
+            queryBuilder.append(" AND u.usuarioEnumTypeEnum = :usuarioEnumTypeEnum");
+            parametros.put("usuarioEnumTypeEnum", filtro.getUsuarioEnumTypeEnum() );
         }
 
         TypedQuery<UsuarioFlyway> query = entityManager.createQuery(queryBuilder.toString(), UsuarioFlyway.class);

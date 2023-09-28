@@ -5,7 +5,9 @@ import com.example.exercicio.entities.UsuarioFlyway;
 import com.example.exercicio.enumType.UsuarioEnumType;
 import com.example.exercicio.service.serviceImpl.UsuarioFlywayServiceImpl;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -73,8 +75,27 @@ public class UsuarioController {
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
     public @ResponseBody List<UsuarioFlyway> filtrarUsuarios(@RequestBody UsuarioFlyway filtro) {
-        // Implemente a lógica de filtragem com base nos critérios do filtro
-        return usuarioFlywayService.filtrarUsuarios(filtro);
+
+        if (filtro.getUsuarioEnumTypeEnum() != null) {
+            return usuarioFlywayService.findByEnum(filtro.getUsuarioEnumTypeEnum());
+        } else {
+                        return usuarioFlywayService.findByAll();
+//            return usuarioFlywayService.filtrarUsuarios(filtro);
+        }
+        //        // Implemente a lógica de filtragem com base nos critérios do filtro
+        //        try {
+        //            UsuarioEnumType tipo = UsuarioEnumType.valueOf(filtro.getUsuarioEnumTypeEnum().name());
+        //
+        //            // Se o valor do enum for válido, você pode prosseguir com o processamento
+        //            // Aqui você pode fazer o que for necessário com o usuário e o tipo
+        //
+        ////            return ResponseEntity.ok("Usuário cadastrado: Nome = " + filtro.getNome() + ", Tipo = " + tipo.name());
+        //        } catch (IllegalArgumentException e) {
+        //            // Se o valor do enum for inválido, retorne uma resposta de erro
+        ////            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Valor de tipo inválido: " + usuario.getTipo());
+        //        }
+
+        //        return usuarioFlywayService.filtrarUsuarios(filtro);
     }
 
 

@@ -17,6 +17,6 @@ public interface UsuarioFlywayRepository extends JpaRepository<UsuarioFlyway, Lo
 
 //    @Query(value = "SELECT * FROM usuario_flyway WHERE usuarioEnumTypeEnum = :tipo", nativeQuery = true)
 //    List<UsuarioFlyway> findByUsuarioEnumTypeEnum(@Param("tipo") UsuarioEnumType funcionarioSetor);
-    List<UsuarioFlyway> findByUsuarioEnumTypeEnum(UsuarioEnumType funcionarioSetor);
+    List<UsuarioFlyway> findByUsuarioEnumTypeEnum(UsuarioEnumType usuarioEnumType);
 
 }

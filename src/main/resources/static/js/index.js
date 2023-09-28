@@ -1,28 +1,28 @@
+// Função para realizar a chamada AJAX quando os campos de filtro ou o campo select forem alterados
 async function performSearch() {
 
-  const searchTerms = Array.from(document.querySelectorAll(".filtroInput")).map(input => input.value);
-  const selectTerm = document.getElementById("filtroTipo").value.toLowerCase();
-  console.info("selectTerm ", selectTerm)
+  const searchTerms = Array.from(document.querySelectorAll(".filtroInput")).map(input => input.value.toLowerCase());
+  const selectTerm = document.getElementById("filtroTipo").value.toUpperCase();
 
   const table = document.getElementById("tabela");
   const rows = table.getElementsByTagName("tr");
 
   // Crie um objeto de filtro com os critérios de pesquisa
-const filtro = {
+  const filtro = {
     nome: searchTerms[0] || null,
     numero: searchTerms[1] || null,
     email: searchTerms[2] || null,
     data: searchTerms[3] || null,
-    usuarioEnumTypeEnum: selectTerm
-};
+    usuarioEnumTypeEnum: selectTerm || null
+  };
 
 
-// Certifique-se de que os valores não sejam undefined ou null
-//Object.keys(filtro).forEach(key => {
-//    if (filtro[key] === undefined || filtro[key] === null) {
-//        delete filtro[key];
-//    }
-// });
+  // Certifique-se de que os valores não sejam undefined ou null
+  Object.keys(filtro).forEach(key => {
+    if (filtro[key] === undefined || filtro[key] === null) {
+      delete filtro[key];
+    }
+  });
 
   // Realize a chamada AJAX com Fetch
   fetch('/usuario/filtrar', {
@@ -30,44 +30,41 @@ const filtro = {
     headers: {
       'Content-Type': 'application/json'
     },
-       body: JSON.stringify(filtro)
+    body: JSON.stringify(filtro)
   })
     .then(response => {
-        if (!response.ok) {
-            throw new Error('Erro na resposta da chamada AJAX');
-        }
-        return response.json();
+      if (!response.ok) {
+        throw new Error('Erro na resposta da chamada AJAX');
+      }
+      return response.json();
     })
     .then(usuariosFiltrados => {
-        // Atualize a tabela com os resultados da pesquisa
-        // Implemente a lógica para atualizar a tabela aqui
+      for (let i = 1; i < rows.length; i++) { // Começando em 1 para pular o cabeçalho
+        const row = rows[i];
+        const cells = row.getElementsByTagName("td");
+        let rowContainsSearchTerm = true;
 
-        for (let i = 1; i < rows.length; i++) { // Começando em 1 para pular o cabeçalho
-            const row = rows[i];
-            const cells = row.getElementsByTagName("td");
-            let rowContainsSearchTerm = true;
+        for (let j = 0; j < cells.length; j++) {
+          const cell = cells[j];
+          const cellText = cell.textContent || cell.innerText;
+          const searchTerm = searchTerms[j];
 
-            for (let j = 0; j < cells.length; j++) {
-              const cell = cells[j];
-              const cellText = cell.textContent || cell.innerText;
-              const searchTerm = searchTerms[j];
-
-              if (searchTerm && cellText.toLowerCase().indexOf(searchTerm) === -1) {
-                rowContainsSearchTerm = false;
-                break;
-              }
-            }
-
-            if (rowContainsSearchTerm) {
-              row.style.display = "";
-            } else {
-              row.style.display = "none";
-            }
+          if (searchTerm && cellText.toLowerCase().indexOf(searchTerm) === -1) {
+            rowContainsSearchTerm = false;
+            break;
+          }
         }
-       console.info("USER => ", usuariosFiltrados)
+
+        if (rowContainsSearchTerm) {
+          row.style.display = "";
+        } else {
+          row.style.display = "none";
+        }
+         console.info("USER => ", usuariosFiltrados)
+      }
     })
     .catch(error => {
-       console.error('Erro na chamada AJAX:', error);
+      console.error('Erro na chamada AJAX:', error);
     });
 }
 
@@ -80,8 +77,6 @@ document.getElementById("filtroTipo").addEventListener("change", performSearch);
 
 
 
-// Função para realizar a chamada AJAX quando os campos de filtro ou o campo select forem alterados
-// Funcionalidade pelo Javascript.
 // Obtém a referência para os campos de entrada de pesquisa
 // const searchInputs = document.querySelectorAll(".filtroInput");
 
