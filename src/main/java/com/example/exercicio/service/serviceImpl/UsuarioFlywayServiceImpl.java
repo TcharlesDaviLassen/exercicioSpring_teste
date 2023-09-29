@@ -136,8 +136,32 @@ public class UsuarioFlywayServiceImpl implements UsuarioFlywayService {
         return usuarioRepository.findByUsuarioEnumTypeEnum(usuarioFlyway);
     }
 
+    @Override
+    public List<UsuarioFlyway> findByNome(String nome) {
+        return usuarioRepository.findByNome(nome);
+    }
+
+    @Override
+    public List<UsuarioFlyway> findByNumero(String numero) {
+        return usuarioRepository.findByNumero(numero);
+    }
+
+    @Override
+    public List<UsuarioFlyway> findByEmail(String email) {
+        return usuarioRepository.findByEmail(email);
+    }
+
+    @Override
+    public List<UsuarioFlyway> findByData(String data) {
+        return usuarioRepository.findByData(data);
+    }
+
     public List<UsuarioFlyway> filtrarUsuarios(UsuarioFlyway filtro) {
         return usuarioFlywayRepositoryDAO.filtrarUsuarios(filtro);
     }
 
+    @Override
+    public List<UsuarioFlyway> findByNomeAndEmail(String nome, String email) {
+        return usuarioRepository.findByNomeAndEmail(nome, email);
+    }
 }

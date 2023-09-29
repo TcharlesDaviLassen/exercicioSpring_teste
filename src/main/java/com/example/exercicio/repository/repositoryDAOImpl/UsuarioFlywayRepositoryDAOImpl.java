@@ -63,17 +63,17 @@ public class UsuarioFlywayRepositoryDAOImpl {
         Map<String, Object> parametros = new HashMap<>();
 
         if (filtro.getNome() != null && !filtro.getNome().isEmpty()) {
-            queryBuilder.append(" AND u.nome LIKE :nome");
+            queryBuilder.append(" AND u.nome ILIKE :nome");
             parametros.put("nome", "%" + filtro.getNome() + "%");
         }
 
         if (filtro.getNumero() != null && !filtro.getNumero().isEmpty()) {
-            queryBuilder.append(" AND u.numero LIKE :numero");
+            queryBuilder.append(" AND u.numero ILIKE :numero");
             parametros.put("numero", "%" + filtro.getNumero() + "%");
         }
 
         if (filtro.getEmail() != null && !filtro.getEmail().isEmpty()) {
-            queryBuilder.append(" AND u.email LIKE :email");
+            queryBuilder.append(" AND u.email ILIKE :email");
             parametros.put("email", "%" + filtro.getEmail() + "%");
         }
 
@@ -83,8 +83,8 @@ public class UsuarioFlywayRepositoryDAOImpl {
         }
 
         if (filtro.getUsuarioEnumTypeEnum() != null && !filtro.getUsuarioEnumTypeEnum().name().isEmpty()) {
-            queryBuilder.append(" AND u.usuarioEnumTypeEnum = :usuarioEnumTypeEnum");
-            parametros.put("usuarioEnumTypeEnum", filtro.getUsuarioEnumTypeEnum() );
+            queryBuilder.append(" AND u.usuarioEnumTypeEnum ILIKE :usuarioEnumTypeEnum");
+            parametros.put("usuarioEnumTypeEnum", "%" + filtro.getUsuarioEnumTypeEnum() + "%" );
         }
 
         TypedQuery<UsuarioFlyway> query = entityManager.createQuery(queryBuilder.toString(), UsuarioFlyway.class);

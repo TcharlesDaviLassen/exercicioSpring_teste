@@ -47,7 +47,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/usuarioPage")
-    public String getUsuarioPage(Model model, UsuarioFlyway usuarioFlyway) {
+    public String getUsuarioPage(Model model) {
         List<UsuarioFlyway> findAllUsuarios = usuarioFlywayService.findByAll();
 
         model.addAttribute("usuarioFlyway", findAllUsuarios);
@@ -55,7 +55,6 @@ public class UsuarioController {
 
         return "usuarioPage";
     }
-
 
     @GetMapping("/inputs")
     public String showForm(Model model) {
@@ -76,19 +75,29 @@ public class UsuarioController {
     )
     public @ResponseBody List<UsuarioFlyway> filtrarUsuarios(@RequestBody UsuarioFlyway filtro) {
 
-        if (filtro.getUsuarioEnumTypeEnum() != null) {
-            return usuarioFlywayService.findByEnum(filtro.getUsuarioEnumTypeEnum());
-        } else {
-//            return usuarioFlywayService.findByAll();
-             return usuarioFlywayService.filtrarUsuarios(filtro);
-        }
+        //        if (filtro.getUsuarioEnumTypeEnum() != null) {
+        //            return usuarioFlywayService.findByEnum(filtro.getUsuarioEnumTypeEnum());
+        //        } else if (filtro.getNome() != null) {
+        //            return usuarioFlywayService.findByNome(filtro.getNome());
+        //        } else if (filtro.getNumero() != null) {
+        //            return usuarioFlywayService.findByNumero(filtro.getNumero());
+        //        } else if (filtro.getEmail() != null) {
+        //            return usuarioFlywayService.findByEmail(filtro.getEmail());
+        //        } else if (filtro.getData() != null) {
+        //            return usuarioFlywayService.findByData(filtro.getData());
+        //        } else {
+
+            return usuarioFlywayService.findByAll();
+
+        //  return usuarioFlywayService.filtrarUsuarios(filtro);
+        //        }
 
         // Implemente a lógica de filtragem com base nos critérios do filtro
         //        try {
         //            UsuarioEnumType tipo = UsuarioEnumType.valueOf(filtro.getUsuarioEnumTypeEnum().name());
 
-                    // Se o valor do enum for válido, você pode prosseguir com o processamento
-                    // Aqui você pode fazer o que for necessário com o usuário e o tipo
+        // Se o valor do enum for válido, você pode prosseguir com o processamento
+        // Aqui você pode fazer o que for necessário com o usuário e o tipo
 
         //            return ResponseEntity.ok("Usuário cadastrado: Nome = " + filtro.getNome() + ", Tipo = " + tipo.name());
         //        } catch (IllegalArgumentException e) {
@@ -96,7 +105,6 @@ public class UsuarioController {
         //            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Valor de tipo inválido: " + usuario.getTipo());
         //        }
     }
-
 
     //    produces = "application/json"
     //    @RequestMapping(value = "/create",
@@ -117,7 +125,7 @@ public class UsuarioController {
         if(editUsuarios.isEmpty()) {
             return "pageNotFound";
         } else {
-//            model.addAttribute("usuarioEdit", editUsuarios);
+            //  model.addAttribute("usuarioEdit", editUsuarios);
             model.addAttribute("editUsuarios", editUsuarios.get());
             return "usuarioEditPage";
         }

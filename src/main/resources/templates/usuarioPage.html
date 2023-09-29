@@ -50,12 +50,12 @@
                         <td th:text="${func.data}"></td>
                         <td class="tipo" th:text="${func.usuarioEnumTypeEnum}"></td>
                         <td class="buttons">
-                            <a th:href="@{/usuario/edit/{id}(id=${func.id})}"
+                            <a id="idUserEdit" th:data-idUserEdit="@{(${func.id})}" th:href="@{/usuario/edit/{id}(id=${func.id})}"
                                method="get"
                                class="btn btn-warning">
                                 <i class="fa fa-pencil"></i>
                             </a>
-                            <a th:href="@{/usuario/delete/{id}(id=${func.id})}"
+                            <a id="idUserDelete" th:data-idUserDelete="@{(${func.id})}" th:href="@{/usuario/delete/{id}(id=${func.id})}"
                                 th:method="get"
                                 class="btn btn-danger">
                                 <i class="fa fa-trash"></i>

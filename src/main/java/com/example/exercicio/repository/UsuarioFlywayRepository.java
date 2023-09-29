@@ -13,7 +13,15 @@ import java.util.Optional;
 @Repository
 public interface UsuarioFlywayRepository extends JpaRepository<UsuarioFlyway, Long> {
 
-    UsuarioFlyway findByNomeAndEmail(String nome, String email);
+    List<UsuarioFlyway> findByNome(String nome);
+
+    List<UsuarioFlyway> findByNumero(String numero);
+
+    List<UsuarioFlyway> findByEmail(String email);
+
+    List<UsuarioFlyway> findByData(String data);
+
+    List<UsuarioFlyway> findByNomeAndEmail(String nome, String email);
 
 //    @Query(value = "SELECT * FROM usuario_flyway WHERE usuarioEnumTypeEnum = :tipo", nativeQuery = true)
 //    List<UsuarioFlyway> findByUsuarioEnumTypeEnum(@Param("tipo") UsuarioEnumType funcionarioSetor);

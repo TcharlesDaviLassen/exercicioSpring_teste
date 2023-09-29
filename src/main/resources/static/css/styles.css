@@ -21,6 +21,10 @@
  }
  */
 
+.table>:not(caption)>*>* {
+     padding: unset;
+}
+
 .custom-table {
    /* border-collapse: separate; */
     border-collapse: collapse;

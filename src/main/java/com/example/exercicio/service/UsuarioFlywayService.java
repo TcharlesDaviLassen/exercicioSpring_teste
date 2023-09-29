@@ -13,6 +13,16 @@ public interface UsuarioFlywayService {
 
     Optional<UsuarioFlyway> findById(Long id);
 
+    List<UsuarioFlyway> findByNome(String nome);
+
+    List<UsuarioFlyway> findByNumero(String numero);
+
+    List<UsuarioFlyway> findByEmail(String email);
+
+    List<UsuarioFlyway> findByData(String data);
+
+    List<UsuarioFlyway> findByNomeAndEmail(String nome, String email);
+
     List<UsuarioFlyway> findByAll();
 
     List<UsuarioFlyway> findByEnum(UsuarioEnumType usuarioFlyway);
