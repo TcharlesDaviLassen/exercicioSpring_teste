@@ -18,9 +18,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // Filtre a tabela principal com base nos critérios de pesquisa
     for (let i = 1; i < rows.length; i++) { // Começando em 1 para pular o cabeçalho
       const row = rows[i];
-      console.info("row => ", row)
+      // console.info("row => ", row)
       const cells = row.getElementsByTagName("td");
-      console.info("cells => ", cells)
+      // console.info("cells => ", cells)
 
       let rowContainsSearchTerm = true;
 
@@ -47,6 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateSecondaryTable(searchTerms);
   }
 
+
   function updateSecondaryTable(searchTerms) {
     const nomeIsEmpty = searchTerms[0] === "" || searchTerms[0] === null;
     const emailIsEmpty = searchTerms[2] === "" || searchTerms[2] === null;
@@ -54,117 +55,285 @@ document.addEventListener("DOMContentLoaded", () => {
     if (nomeIsEmpty && emailIsEmpty) {
       tableRender.style.display = "none";
     } else {
+      tableRender.classList.add("container", "mt-4");
+      const tableSecundaria = document.createElement("table");
+      tableRender.appendChild(tableSecundaria);
+      tableRender.classList.add("table", "table-striped", "table-bordered", "custom-table");
+
       tableRender.style.display = "";
 
       // Limpar a tabela secundária
       tableRender.innerHTML = "";
 
-      // Clonar a tabela principal
-      const clonedTable = tabela.cloneNode(true);
-
-      tableRender.style.display = "flex";
-      tableRender.style.alignItems = "center";
-      tableRender.style.marginLeft = "19rem"
-
-      // Iterar sobre as linhas clonadas e remover as que não correspondem aos critérios de pesquisa
-      // Crie uma nova tabela
-      const newTable = document.createElement("table");
-      newTable.style.width = "1rem"
-      newTable.classList.add("table", "table-striped", "table-bordered", "custom-table", "cunstom-render");
-
       // Crie o cabeçalho da nova tabela
       const thead = document.createElement("thead");
-      thead.classList.add("thead-dark", "custom-thead");
-      const trRow = document.createElement("tr");
-      trRow.innerHTML =
-        `
-          <th>Nome</th>
-          <th>Email</th>
-          <th>Ações</th>
-        `;
-      thead.appendChild(trRow);
-      newTable.appendChild(thead);
+      thead.classList.add("thead-dark", "custom-thead")
 
-      const clonedRows = clonedTable.querySelectorAll("tbody tr");
-      clonedRows.forEach(clonedRow => {
-        const cells = clonedRow.querySelectorAll("td");
+      const trRow = document.createElement("tr");
+      trRow.innerHTML = `
+        <th>Nome</th>
+        <th>Email</th>
+        <th>Ações</th>
+      `;
+      thead.appendChild(trRow);
+
+      // Adicione o cabeçalho à tabela secundária
+      tableRender.appendChild(thead);
+
+      // Substitua "tabela" pelo ID da sua tabela principal
+      const tabela = document.getElementById("tabela");
+
+      // Iterar sobre as linhas da tabela principal
+      const rows = tabela.querySelectorAll("tbody tr");
+      rows.forEach(row => {
+
+        const cells = row.querySelectorAll("td");
         const nome = cells[0].textContent || cells[0].innerText;
         const email = cells[2].textContent || cells[2].innerText;
-        const searchTermNome = searchTerms[0];
-        const searchTermEmail = searchTerms[2];
+
+        const searchTermNome = searchTerms[0].toLowerCase();
+        const searchTermEmail = searchTerms[2].toLowerCase();
 
         if (
           (!searchTermNome || nome.toLowerCase().includes(searchTermNome)) &&
           (!searchTermEmail || email.toLowerCase().includes(searchTermEmail))
         ) {
 
-          // Clonar a linha da tabela principal
+          // Crie uma nova linha na tabela secundária
           const newRow = document.createElement("tr");
 
-          // Criar as células para o nome e o email
+          // Crie as células para o nome e o email
           const nomeCell = document.createElement("td");
           nomeCell.textContent = nome;
 
           const emailCell = document.createElement("td");
           emailCell.textContent = email;
 
-          // Adicionar as células de nome e email à nova linha
+          // Adicione as células à nova linha
           newRow.appendChild(nomeCell);
           newRow.appendChild(emailCell);
 
-          // Adicionar os botões de "editar" e "excluir" à nova linha
-          const acoesCell = document.createElement("td");
-          acoesCell.classList.add("buttons");
+          // Clone e adicione os botões à célula de ações
+          const buttonsCell = row.querySelector("td.buttons");
+          const editButton = buttonsCell.querySelector(".btn-warning").cloneNode(true);
+          const deleteButton = buttonsCell.querySelector(".btn-danger").cloneNode(true);
 
-          const baseEditUrl = '/usuario/edit/';
-          const baseDeleteUrl = '/usuario/delete/';
+          // Adicione os botões à nova linha
+          const actionsCell = document.createElement("td");
+          actionsCell.classList.add("buttons");
+          actionsCell.appendChild(editButton);
+          actionsCell.appendChild(deleteButton);
 
+          newRow.appendChild(actionsCell);
 
-          const elementIdUserEdit = document.getElementById('idUserEdit');
-          const idUserEdit = elementIdUserEdit.getAttribute('data-idUserEdit');
-
-          const element = document.getElementById('idUserDelete');
-          const idUserDelete = element.getAttribute('data-idUserDelete');
-
-          const editarButton = document.createElement("a");
-          editarButton.href = `${baseEditUrl}${idUserEdit}`;
-          // editarButton.classList.add("btn", "btn-warning");
-          editarButton.innerHTML =
-            `
-              <i class="fa fa-pencil"></i>
-          `;
-
-          // <a th: href="@{/usuario/edit/{id}(id=${idUserEdit})}"
-          //   method="get"
-          //   class="btn btn-warning">
-          //   <i class="fa fa-pencil"></i>
-          // </a>
-
-          const excluirButton = document.createElement("a");
-          excluirButton.href = `${baseDeleteUrl}${idUserDelete}`;
-          // excluirButton.classList.add("btn", "btn-danger");
-          excluirButton.innerHTML =
-            `
-              <i class="fa fa-trash"></i>
-          `;
-
-          // <a th:href="@{/usuario/delete/{id}(id=${idUserDelete})}"
-          //       th:method="get"
-          //       class="btn btn-danger">
-          //       <i class="fa fa-trash"></i>
-          //   </a>
-
-          acoesCell.appendChild(editarButton);
-          acoesCell.appendChild(excluirButton);
-          newRow.appendChild(acoesCell);
-
-          // Adicione a linha clonada com botões à tabela secundária
-          newTable.appendChild(newRow)
-          tableRender.appendChild(newTable);
+          // Adicione a nova linha à tabela secundária
+          tableRender.appendChild(newRow);
         }
       });
+
+      // Exiba a tabela secundária
+      tableRender.style.display = "table";
     }
   }
+
+
+  // function updateSecondaryTable(searchTerms) {
+  //   const nomeIsEmpty = searchTerms[0] === "" || searchTerms[0] === null;
+  //   const emailIsEmpty = searchTerms[2] === "" || searchTerms[2] === null;
+
+  //   if (nomeIsEmpty && emailIsEmpty) {
+  //     tableRender.style.display = "none";
+  //   } else {
+  //     const baseEditUrl = '/usuario/edit/';
+  //     const baseDeleteUrl = '/usuario/delete/';
+
+  //     tableRender.style.display = "";
+
+  //     // Limpar a tabela secundária
+  //     tableRender.innerHTML = "";
+
+  //     // Clonar a tabela principal
+  //     const clonedTable = tabela.cloneNode(true);
+
+  //     tableRender.style.display = "flex";
+  //     tableRender.style.alignItems = "center";
+  //     tableRender.style.marginLeft = "19rem"
+
+  //     // Iterar sobre as linhas clonadas e remover as que não correspondem aos critérios de pesquisa
+  //     // Crie uma nova tabela
+  //     const newTable = document.createElement("table");
+  //     newTable.style.width = "1rem"
+  //     newTable.classList.add("table", "table-striped", "table-bordered", "custom-table", "cunstom-render");
+
+  //     // Crie o cabeçalho da nova tabela
+  //     const thead = document.createElement("thead");
+  //     thead.classList.add("thead-dark", "custom-thead");
+  //     const trRow = document.createElement("tr");
+  //     trRow.innerHTML =
+  //       `
+  //         <th>Nome</th>
+  //         <th>Email</th>
+  //         <th>Ações</th>
+  //       `;
+  //     thead.appendChild(trRow);
+  //     newTable.appendChild(thead);
+
+  //     const clonedRows = clonedTable.querySelectorAll("tbody tr");
+  //     clonedRows.forEach(clonedRow => {
+  //       const cells = clonedRow.querySelectorAll("td");
+  //       const nome = cells[0].textContent || cells[0].innerText;
+  //       const email = cells[2].textContent || cells[2].innerText;
+  //       const searchTermNome = searchTerms[0];
+  //       const searchTermEmail = searchTerms[2];
+
+  //       // Clonar os botões dentro da célula "td.buttons"
+  //       const buttonsCell = clonedRow.querySelector("td.buttons");
+  //       const editButton = buttonsCell.querySelector(".btn-warning");
+  //       const deleteButton = buttonsCell.querySelector(".btn-danger");
+
+  //       // // Clonar os botões
+  //       const clonedEditButton = editButton.cloneNode(true);
+  //       const clonedDeleteButton = deleteButton.cloneNode(true);
+
+  //       // Modificar os IDs dos botões clonados conforme necessário
+  //       // const newIndex = 999; // Novo índice desejado
+  //       // clonedEditButton.id = `idUserEdit${newIndex}`;
+  //       // clonedDeleteButton.id = `idUserDelete${newIndex}`;newIndex
+
+  //       // Adicionar os botões clonados de volta à célula "td.buttons"
+  //       // buttonsCell.appendChild(clonedEditButton);
+  //       // buttonsCell.appendChild(clonedDeleteButton);
+
+  //       // const editLink = clonedRow.querySelector('.btn-warning');
+  //       // const deleteLink = clonedRow.querySelector('.btn-danger');
+
+  //       if (
+  //         (!searchTermNome || nome.toLowerCase().includes(searchTermNome)) &&
+  //         (!searchTermEmail || email.toLowerCase().includes(searchTermEmail))
+  //       ) {
+
+  //         // Clonar a linha da tabela principal
+  //         const newRow = document.createElement("tr");
+
+  //         // Criar as células para o nome e o email
+  //         const nomeCell = document.createElement("td");
+  //         nomeCell.textContent = nome;
+
+  //         const emailCell = document.createElement("td");
+  //         emailCell.textContent = email;
+
+  //         // Adicionar as células de nome e email à nova linha
+  //         newRow.appendChild(nomeCell);
+  //         newRow.appendChild(emailCell);
+
+  //         // Criar a primeira âncora (editar)
+  //         var editarLink = document.createElement("a");
+  //         editarLink.id = "idUserEdit";
+  //         editarLink.setAttribute("method", "get");
+  //         editarLink.className = "idUserEditClass btn btn-warning";
+
+  //         var editarIcon = document.createElement("i");
+  //         editarIcon.className = "fa fa-pencil";
+  //         editarLink.appendChild(editarIcon);
+
+  //         // Criar a segunda âncora (excluir)
+  //         var excluirLink = document.createElement("a");
+  //         excluirLink.id = "idUserDelete";
+  //         excluirLink.setAttribute("th:method", "get");
+  //         excluirLink.className = "idUserDeleteClass btn btn-danger";
+
+  //         var excluirIcon = document.createElement("i");
+  //         excluirIcon.className = "fa fa-trash";
+  //         excluirLink.appendChild(excluirIcon);
+
+  //         // Obter a célula da tabela onde os elementos serão adicionados
+  //         var cell = document.querySelector(".buttons");
+
+  //         // Adicionar as âncoras à célula
+  //         cell.appendChild(editarLink);
+  //         cell.appendChild(excluirLink);
+
+  //         // // Adicionar os botões de "editar" e "excluir" à nova linha
+  //         // const acoesCell = document.createElement("td");
+  //         // acoesCell.classList.add("buttons");
+
+  //         // // const elementIdUserEdit = document.getElementById('idUserEdit');
+  //         // // const idUserEdit = elementIdUserEdit.getAttribute('data-idUserEdit');
+  //         // // const element = document.getElementById('idUserDelete');
+  //         // // const idUserDelete = element.getAttribute('data-idUserDelete');
+
+  //         // // const cloneEdit = clonedEditButton.getAttribute("href");
+
+  //         // const editarButton = document.createElement("td");
+  //         // const editarTagA = document.createElement("a");
+  //         // editarTagA.setAttribute("href", `${clonedEditButton}`);
+  //         // editarButton.appendChild(editarTagA);
+  //         // // const elementIdUserEdit = document.getElementById('idUserEdit');
+  //         // // const idUserEdit = elementIdUserEdit.getAttribute("data-idUserEdit");
+  //         // // editarButton.href = `${baseEditUrl}${idUserEdit}`;
+  //         // // editarButton.href = `${clonedEditButton}`;
+  //         // // editarButton.setAttribute("data-idUserEdit", idUserEdit); // Adicione o ID como atributo de dados
+  //         // editarButton.classList.add("btn", "btn-warning");
+  //         // // editarButton.setAttribute("class", "btn btn-warning");
+  //         // // editarButton.innerHTML =
+  //         // //   `
+  //         // //     <i class="fa fa-pencil"></i>
+  //         // // `;
+
+  //         // // <a th: href="@{/usuario/edit/{id}(id=${idUserEdit})}"
+  //         // //   method="get"
+  //         // //   class="btn btn-warning">
+  //         // //   <i class="fa fa-pencil"></i>
+  //         // // </a>
+
+  //         // const excluirButton = document.querySelector("td a.idUserDeleteClass");
+  //         // // const element = document.getElementById('idUserDelete');
+  //         // // const idUserDelete = element.getAttribute("data-idUserDelete");
+  //         // // excluirButton.href = `${clonedDeleteButton.getAttribute("href")}`;
+  //         // // excluirButton.setAttribute("data-idUserDelete", idUserDelete); // Adicione o ID como atributo de dados
+  //         // // excluirButton.classList.add("btn", "btn-danger");
+  //         // excluirButton.innerHTML =
+  //         //   `
+  //         //     <a href="${clonedDeleteButton}"
+  //         //         th:method="get"
+  //         //         class="btn btn-danger">
+  //         //         <i class="fa fa-trash"></i>
+  //         //     </a>
+  //         // `;
+
+  //         // // <a th:href="@{/usuario/delete/{id}(id=${idUserDelete})}"
+  //         // //       th:method="get"
+  //         // //       class="btn btn-danger">
+  //         // //       <i class="fa fa-trash"></i>
+  //         // //   </a>
+
+  //         // // Ouvinte de eventos para o botão "editar"
+  //         // editarButton.addEventListener("click", function (event) {
+  //         //   event.preventDefault(); // Evite que o link seja seguido
+  //         //   const idUserEdit = editarButton.getAttribute("data-idUserEdit");
+  //         //   // Agora, você pode usar idUserEdit como o ID correto para a edição
+  //         //   console.log("ID de edição: " + idUserEdit);
+  //         // });
+
+  //         // // Ouvinte de eventos para o botão "excluir"
+  //         // excluirButton.addEventListener("click", function (event) {
+  //         //   event.preventDefault(); // Evite que o link seja seguido
+  //         //   const idUserDelete = this.getAttribute("data-idUserDelete");
+  //         //   // Agora, você pode usar idUserDelete como o ID correto para a exclusão
+  //         //   console.log("ID de exclusão: " + idUserDelete);
+  //         // });
+
+  //         // acoesCell.appendChild(cell);
+  //         // acoesCell.appendChild(excluirButton);
+  //         newRow.appendChild(cell);
+
+  //         // Adicione a linha clonada com botões à tabela secundária
+  //         newTable.appendChild(newRow)
+  //         tableRender.appendChild(newTable);
+  //       }
+  //     });
+  //   }
+  // }
 
   // function updateSecondaryTable(searchTerms) {
   //   const nomeIsEmpty = !searchTerms[0].trim();
@@ -1068,3 +1237,7 @@ document.addEventListener("DOMContentLoaded", () => {
 //  input.addEventListener("input", performSearch);
 //});
 //selectInput.addEventListener("change", performSearch);
+
+
+
+

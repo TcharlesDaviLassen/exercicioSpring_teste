@@ -13,6 +13,8 @@
                 </button>
             </a>
 
+            
+
             <table id="tabela" class="table table-striped table-bordered custom-table">
                 <thead id="theadId" class="thead-dark custom-thead">
                     <tr class="custom-thead">
@@ -41,8 +43,8 @@
                         <th class="thInput"><input type="text" class="filtroInput" id="filtroAcoes" style="width: 8rem;"  disabled></th>
                     </tr>
                 </thead>
-
                 <tbody id="bodyTable">
+                
                     <tr class="custom-row" th:each="func : ${usuarioFlyway}">
                         <td th:text="${func.nome}"></td>
                         <td th:text="${func.numero}"></td>
@@ -52,12 +54,12 @@
                         <td class="buttons">
                             <a id="idUserEdit" th:data-idUserEdit="@{(${func.id})}" th:href="@{/usuario/edit/{id}(id=${func.id})}"
                                method="get"
-                               class="btn btn-warning">
+                               class="idUserEditClass btn btn-warning">
                                 <i class="fa fa-pencil"></i>
                             </a>
                             <a id="idUserDelete" th:data-idUserDelete="@{(${func.id})}" th:href="@{/usuario/delete/{id}(id=${func.id})}"
                                 th:method="get"
-                                class="btn btn-danger">
+                                class="idUserDeleteClass btn btn-danger">
                                 <i class="fa fa-trash"></i>
                             </a>
                         </td>

@@ -33,6 +33,4 @@ public interface UsuarioFlywayService {
 
     void deleteUser(Long id);
 
-
-
 }

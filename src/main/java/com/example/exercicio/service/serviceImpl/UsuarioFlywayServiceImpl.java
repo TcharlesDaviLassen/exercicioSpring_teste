@@ -156,6 +156,10 @@ public class UsuarioFlywayServiceImpl implements UsuarioFlywayService {
         return usuarioRepository.findByData(data);
     }
 
+    public List<UsuarioFlyway> filtrarUsuariosType(UsuarioEnumType enumType) {
+        return usuarioRepository.findByUsuarioEnumTypeEnum(enumType);
+    }
+
     public List<UsuarioFlyway> filtrarUsuarios(UsuarioFlyway filtro) {
         return usuarioFlywayRepositoryDAO.filtrarUsuarios(filtro);
     }
