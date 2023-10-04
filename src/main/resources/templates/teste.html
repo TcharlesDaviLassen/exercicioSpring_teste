@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- Inclua os arquivos de estilo e script do DataTables -->
+        <link rel="stylesheet" type="text/css"
+            href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script
+            src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
+        <!-- Inclua o Mustache.js -->
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.1/mustache.js"
+            integrity="sha512-IDcWx4i9cyu+HgDbPzY7fKV9aOh0Skt1iFFTZype6N1c/Slqwum0UaGX/Ek2ZSS+RNoaGvtGsTPiSVNfMKaffg=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <title>Exemplo de DataTables com Mustache.js</title>
+
+    </head>
+    <body>
+        <h1>Exemplo de DataTables com Mustache.js</h1>
+
+        <!-- Tabela onde os dados serão exibidos -->
+        <table id="example" class="display" style="width:100%">
+            <thead class="head-target">
+                <!-- Template Mustache para cabeçalho da tabela -->
+                <script class="head-template" type="text/template">
+                <tr>
+                    {{#showFilters}}
+                    {{#fields}}
+                    <th class="center {{cssClassSize}}">
+                        {{#isText}}
+                            <input type="text" autocomplete="off" class="width-100 enter-as-tab read-list-search like {{customClass}}" name="{{id}}" />
+                        {{/isText}}
+                        {{#isNumber}}
+                            <input type="number" autocomplete="off" class="width-100 enter-as-tab read-list-search {{customClass}}" name="{{id}}" />
+                        {{/isNumber}}
+                        {{#isCheckbox}}
+                            <input type="checkbox" class="enter-as-tab read-list-search checkbox-read {{customClass}}" name="{{id}}" value="true"/>
+                        {{/isCheckbox}}
+                        {{#isSelect}}
+                            <select class="width-100 enter-as-tab read-list-search {{customClass}}" name="{{id}}">
+                                <option value=""></option>
+                                {{#options}}
+                                    <option value="{{value}}">{{text}}</option>    
+                                {{/options}}
+                            </select>
+                        {{/isSelect}}
+                    </th>
+                    {{/fields}}
+                    {{#showActions}}
+                    <th></th>
+                    {{/showActions}}
+                    {{/showFilters}}
+                </tr>
+                <tr>
+                    {{#fields}}
+                    <th class="{{cssClass}} {{cssClassSize}}">{{label}}</th>
+                    {{/fields}}
+                    {{#showActions}}
+                    <th class="center datatable-min-column-size">Ações</th>
+                    {{/showActions}}
+                </tr>
+            </script>
+            </thead>
+            <tbody class="data-target">
+                <!-- Linhas da tabela serão preenchidas com Mustache.js -->
+            </tbody>
+            <tfoot>
+                <!-- Template Mustache para paginação -->
+                <script class="pagination-template" type="text/template">
+                {{#hasData}}
+                <ul class="pagination no-margin" th:id="${paginationId}">
+                    <li><a href="/" class="first-page" title="Primeira Página">&#8676;</a></li>
+                    <li class="{{previous.cssClass}}"><a href="/" page-value="{{previous.number}}" class="page-id" tabindex="-1" title="Página Anterior">&#171;</a></li>
+                    {{#count}}
+                    <li class="{{cssClass}}"><a href="/" class="page-id" page-value="{{number}}" tabindex="-1">{{text}}</a></li>
+                    {{/count}}
+                    <li class="{{next.cssClass}}"><a href="/" page-value="{{next.number}}" class="page-id" tabindex="-1" title="Próxima Página">&#187;</a></li>
+                    <li><a href="/" class="last-page" title="Última Página">&#8677;</a></li>
+                </ul>
+                {{/hasData}} 
+                {{^hasData}} <strong>Nenhum registro encontrado!</strong> {{/hasData}}
+            </script>
+            </tfoot>
+        </table>
+
+        <!-- Inicialização do DataTables -->
+        <script>
+        $(document).ready(function () {
+            // Dados de exemplo
+            var data = [
+                { id: 1, nome: "João", idade: 30 },
+                { id: 2, nome: "Maria", idade: 25 }
+                // Adicione mais objetos de dados conforme necessário
+            ];
+
+            // Template Mustache para linhas da tabela
+            var rowTemplate = `
+                {{#data}}
+                <tr>
+                    <td>{{id}}</td>
+                    <td>{{nome}}</td>
+                    <td>{{idade}}</td>
+                </tr>
+                {{/data}}
+            `;
+
+            // Renderizar o template com os dados e adicionar à tabela
+            var renderedRows = Mustache.render(rowTemplate, { data: data });
+            $("#example tbody").html(renderedRows);
+
+            // Aplicar o DataTables à tabela
+            $('#example').DataTable();
+        });
+    </script>
+    </body>
+</html>

@@ -20,9 +20,9 @@
 /* cursor: pointer; } */ /* Cursor do mouse
 } */
 
-.table>:not(caption)>*>* {
+/* .table>:not(caption)>*>* {
     padding: unset;
-}
+} */
 
 .custom-table {
     /* border-collapse: separate; */
@@ -113,6 +113,25 @@
     box-shadow: 0 4px 4px rgba(0, 0, 0, 1);
     /* Sombra sutil quando passar o mouse por cima */
 }
+
+.secondTable {
+    display: flex;
+    gap: 4px;
+}
+
+.btn-warning {
+    color: #000;
+    background-color: #ffc107 !important;
+    border-color: #ffc107 !important;
+}
+
+.btn-danger {
+    color: #fff;
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+}
+
+
 
 
 

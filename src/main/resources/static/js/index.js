@@ -10,10 +10,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   document.getElementById("filtroTipo").addEventListener("change", performSearch);
 
-
   function performSearch() {
     const searchTerms = Array.from(document.querySelectorAll(".filtroInput")).map(input => input.value.toLowerCase());
-    const selectTerm = document.getElementById("filtroTipo").value.toUpperCase();
+    // const selectTerm = document.getElementById("filtroTipo").value.toUpperCase();
 
     // Filtre a tabela principal com base nos critérios de pesquisa
     for (let i = 1; i < rows.length; i++) { // Começando em 1 para pular o cabeçalho
@@ -41,26 +40,37 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         row.style.display = "none";
       }
+
     }
 
+    // Contar o número de linhas visíveis na tabela principal
+    let visibleRowCount = 0;
+    for (let i = 1; i < rows.length; i++) {
+      if (rows[i].style.display !== "none") {
+        visibleRowCount++;
+      }
+    }
+
+    // Atualizar a exibição da tabela secundária e ocultar o thead conforme necessário
     // Atualize a exibição da tabela secundária
-    updateSecondaryTable(searchTerms);
+    if (visibleRowCount > 1) {
+      updateSecondaryTable(searchTerms, visibleRowCount);
+      tableRender.querySelector("thead").style.display = "";
+    } else {
+      updateSecondaryTable(searchTerms, 0); // Não há resultados, passe 0 para updateSecondaryTable
+      tableRender.querySelector("thead").style.display = "none";
+    }
   }
 
-
-  function updateSecondaryTable(searchTerms) {
+  function updateSecondaryTable(searchTerms, conn) {
     const nomeIsEmpty = searchTerms[0] === "" || searchTerms[0] === null;
     const emailIsEmpty = searchTerms[2] === "" || searchTerms[2] === null;
 
     if (nomeIsEmpty && emailIsEmpty) {
       tableRender.style.display = "none";
     } else {
-      tableRender.classList.add("container", "mt-4");
       const tableSecundaria = document.createElement("table");
-      tableRender.appendChild(tableSecundaria);
-      tableRender.classList.add("table", "table-striped", "table-bordered", "custom-table");
-
-      tableRender.style.display = "";
+      tableSecundaria.classList.add("table", "table-striped", "table-bordered", "custom-table");
 
       // Limpar a tabela secundária
       tableRender.innerHTML = "";
@@ -70,15 +80,21 @@ document.addEventListener("DOMContentLoaded", () => {
       thead.classList.add("thead-dark", "custom-thead")
 
       const trRow = document.createElement("tr");
-      trRow.innerHTML = `
+      if (conn != 0) {
+        trRow.innerHTML = `
         <th>Nome</th>
         <th>Email</th>
         <th>Ações</th>
-      `;
+      `
+      } else {
+        tableRender.innerHTML = `<div><h1>Nenhum resultado encontrado</h1></div>`
+      }
+
       thead.appendChild(trRow);
 
       // Adicione o cabeçalho à tabela secundária
-      tableRender.appendChild(thead);
+      tableSecundaria.appendChild(thead)
+      tableRender.appendChild(tableSecundaria);
 
       // Substitua "tabela" pelo ID da sua tabela principal
       const tabela = document.getElementById("tabela");
@@ -113,21 +129,39 @@ document.addEventListener("DOMContentLoaded", () => {
           newRow.appendChild(nomeCell);
           newRow.appendChild(emailCell);
 
+
           // Clone e adicione os botões à célula de ações
           const buttonsCell = row.querySelector("td.buttons");
-          const editButton = buttonsCell.querySelector(".btn-warning").cloneNode(true);
+          // const editButton = buttonsCell.querySelector(".btn-warning").cloneNode(true);
+
+          // Criando o clone dos botões
+          // Sem usar o cloneNode()
+          const editButton = buttonsCell.querySelector(".btn-warning")
+          // Crie um novo elemento com a mesma tag name
+          var cloneDoElemento = document.createElement(editButton.tagName);
+          // Copie os atributos do elemento original para o clone
+          for (var i = 0; i < editButton.attributes.length; i++) {
+            var atributo = editButton.attributes[i];
+            cloneDoElemento.setAttribute(atributo.name, atributo.value);
+          }
+          // Copie o conteúdo do elemento original para o clone
+          cloneDoElemento.innerHTML = editButton.innerHTML;
+          // Agora você tem um clone do elemento na variável cloneDoElemento
+          // Você pode fazer o que quiser com o clone, como adicioná-lo a algum lugar no documento
+
           const deleteButton = buttonsCell.querySelector(".btn-danger").cloneNode(true);
 
           // Adicione os botões à nova linha
           const actionsCell = document.createElement("td");
-          actionsCell.classList.add("buttons");
-          actionsCell.appendChild(editButton);
+          actionsCell.classList.add("buttons", "secondTable");
+          actionsCell.appendChild(cloneDoElemento);
           actionsCell.appendChild(deleteButton);
 
           newRow.appendChild(actionsCell);
 
           // Adicione a nova linha à tabela secundária
-          tableRender.appendChild(newRow);
+          tableSecundaria.appendChild(newRow)
+          tableRender.appendChild(tableSecundaria);
         }
       });
 
