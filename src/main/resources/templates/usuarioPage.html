@@ -49,7 +49,7 @@
                         <td th:text="${func.data}"></td>
                         <td class="tipo" th:text="${func.usuarioEnumTypeEnum}"></td>
                         <td class="buttons">
-                            <a id="idUserEdit" th:data-idUserEdit="@{(${func.id})}" th:href="@{/usuario/edit/{id}(id=${func.id})}"
+                            <a id="idUserEdit" th:data-idUserEditData="@{(${func.id})}" th:href="@{/usuario/edit/{id}(id=${func.id})}"
                                method="get"
                                class="idUserEditClass btn btn-warning">
                                 <i class="fa fa-pencil"></i>
