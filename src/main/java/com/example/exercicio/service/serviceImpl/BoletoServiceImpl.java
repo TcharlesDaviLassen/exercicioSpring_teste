@@ -21,7 +21,6 @@ import net.sf.jasperreports.engine.JasperReport;
 public class BoletoServiceImpl implements BoletoService {
 
     private final BoletoRepository boletoRepository;
-
     public BoletoServiceImpl(BoletoRepository boletoRepository) {
         this.boletoRepository = boletoRepository;
     }

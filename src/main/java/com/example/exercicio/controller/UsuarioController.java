@@ -2,10 +2,15 @@ package com.example.exercicio.controller;
 
 import com.example.exercicio.DTO.User;
 import com.example.exercicio.DTO.UsuarioDTO;
-import com.example.exercicio.entities.UsuarioFlyway;
+import com.example.exercicio.entities.*;
 import com.example.exercicio.enumType.UsuarioEnumType;
+import com.example.exercicio.repository.OrderRepository;
+import com.example.exercicio.service.serviceImpl.AddressService;
+import com.example.exercicio.service.serviceImpl.MultiTransactionExampleService;
+import com.example.exercicio.service.serviceImpl.OrderService;
 import com.example.exercicio.service.serviceImpl.UsuarioFlywayServiceImpl;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -72,39 +77,7 @@ public class UsuarioController {
 
     @RequestMapping(value = "/filtrar", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody List<UsuarioFlyway> filtrarUsuarios(@RequestBody UsuarioFlyway filtro) {
-
-        // if (filtro.getUsuarioEnumTypeEnum() != null) {
-        // return usuarioFlywayService.findByEnum(filtro.getUsuarioEnumTypeEnum());
-        // } else if (filtro.getNome() != null) {
-        // return usuarioFlywayService.findByNome(filtro.getNome());
-        // } else if (filtro.getNumero() != null) {
-        // return usuarioFlywayService.findByNumero(filtro.getNumero());
-        // } else if (filtro.getEmail() != null) {
-        // return usuarioFlywayService.findByEmail(filtro.getEmail());
-        // } else if (filtro.getData() != null) {
-        // return usuarioFlywayService.findByData(filtro.getData());
-        // } else {
-
         return usuarioFlywayService.findByAll();
-
-        // return usuarioFlywayService.filtrarUsuarios(filtro);
-        // }
-
-        // Implemente a lógica de filtragem com base nos critérios do filtro
-        // try {
-        // UsuarioEnumType tipo =
-        // UsuarioEnumType.valueOf(filtro.getUsuarioEnumTypeEnum().name());
-
-        // Se o valor do enum for válido, você pode prosseguir com o processamento
-        // Aqui você pode fazer o que for necessário com o usuário e o tipo
-
-        // return ResponseEntity.ok("Usuário cadastrado: Nome = " + filtro.getNome() +
-        // ", Tipo = " + tipo.name());
-        // } catch (IllegalArgumentException e) {
-        // Se o valor do enum for inválido, retorne uma resposta de erro
-        // return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Valor de tipo
-        // inválido: " + usuario.getTipo());
-        // }
     }
 
     // produces = "application/json"
@@ -165,5 +138,52 @@ public class UsuarioController {
         usuarioFlywayService.deleteUser(id);
 
         return "redirect:/usuario/usuarioPage";
+    }
+
+
+
+
+
+
+
+
+    // Teste transaction
+    @Autowired
+    private MultiTransactionExampleService multiTransactionExampleService;
+
+    @GetMapping("/getTansaction")
+    public void executeTransactions() {
+        multiTransactionExampleService.performSuccessfulTransaction();
+        multiTransactionExampleService.performFailedTransaction();
+    }
+
+    // Teste EmbeddedId
+    @Autowired
+    private OrderService orderService;
+
+    @GetMapping("/executeOrderIdEmbeddedId")
+    public void executeOrderIdEmbeddedId() {
+
+        OrderId orderId = new OrderId("12345", 1L); // Número do pedido e ID do cliente
+        Order order = new Order(orderId, "Product ABC", 5);
+        orderService.createOrder(order);
+
+        Order retrievedOrder = orderService.getOrder(orderId);
+        System.out.println(retrievedOrder);
+    }
+
+    // Teste Embedded
+    @Autowired
+    private AddressService addressService;
+
+    @GetMapping("/executeOrderIdEmbedded")
+    private  void executeOrderIdEmbedded() {
+        Address address = new Address();
+        StreetInfo streetInfo = new StreetInfo("123", "Main Street");
+        address.setStreetInfo(streetInfo);
+        address.setCity("Sample City");
+        address.setState("Sample State");
+
+        addressService.createAddress(address);
     }
 }

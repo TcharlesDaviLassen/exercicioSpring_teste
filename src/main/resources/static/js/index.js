@@ -18,9 +18,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const row = rows[i];
 
     // Adicione um ouvinte de eventos de clique à linha
-    row.addEventListener("click", function () {
+    row.addEventListener("dblclick", function () {
       // Obtenha o ID da linha clicada
-      const id = this.querySelector("#idUserEdit").getAttribute("data-idUserEditData");
+      const id = this.querySelector(".idUserEditClass").getAttribute("data-idUserEditData");
 
       // Redirecione para a tela de edição com base no ID
       window.location.href = `/usuario/edit/${id}`;
@@ -35,6 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
     for (let i = 1; i < rows.length; i++) { // Começando em 1 para pular o cabeçalho
       const row = rows[i];
       const cells = row.getElementsByTagName("td");
+      console.info("cells => ", cells)
 
       let rowContainsSearchTerm = true;
 

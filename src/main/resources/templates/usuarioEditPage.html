@@ -47,7 +47,7 @@
 
             <div style="margin-bottom: 1rem;">
                 <label for="data" style="display: inline-block; width: 6rem;">Data:</label>
-                <input class="labelEdit" type="text" id="data" name="data" th:value="${editUsuarios.data}" required>
+                <input class="labelEdit editData" type="text" id="data" name="data" th:value="${editUsuarios.data}" readonly="readonly">
             </div>
 
             <div style="margin-bottom: 1rem;">
@@ -63,4 +63,10 @@
             <button type="submit" class="btn btn-info">Salvar</button>
         </form>
     </body>
+
+    <script>
+            var input = document.querySelector(".editData");
+            input.disabled = true;
+    </script>
+
 </html>
