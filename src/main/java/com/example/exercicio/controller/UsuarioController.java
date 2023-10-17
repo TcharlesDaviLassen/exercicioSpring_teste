@@ -4,6 +4,7 @@ import com.example.exercicio.DTO.User;
 import com.example.exercicio.DTO.UsuarioDTO;
 import com.example.exercicio.entities.*;
 import com.example.exercicio.enumType.UsuarioEnumType;
+import com.example.exercicio.errorsUtils.BusinessException.BusinessException;
 import com.example.exercicio.repository.OrderRepository;
 import com.example.exercicio.service.serviceImpl.AddressService;
 import com.example.exercicio.service.serviceImpl.MultiTransactionExampleService;
@@ -101,7 +102,6 @@ public class UsuarioController {
         if (editUsuarios.isEmpty()) {
             return "pageNotFound";
         } else {
-            // model.addAttribute("usuarioEdit", editUsuarios);
             model.addAttribute("editUsuarios", editUsuarios.get());
             return "usuarioEditPage";
         }
@@ -114,8 +114,6 @@ public class UsuarioController {
     // @ResponseBody
     @PostMapping("/edit/{id}")
     public String edit(@PathVariable(name = "id") Long id, @Valid UsuarioFlyway usuarioFlyway) {
-        var editUser = usuarioFlywayService.edit(usuarioFlyway);
-
         return "redirect:/usuario/usuarioPage";
     }
 
@@ -186,4 +184,26 @@ public class UsuarioController {
 
         addressService.createAddress(address);
     }
+
+
+
+    @GetMapping("/some-api-endpoint")
+    public String somePage(Model model) {
+        try {
+            //  Coloque aqui o código que pode lançar BusinessException
+            String arg1 = "34534637";
+            String arg2 = "98667856425435";
+            // String errorMsg = String.format("Erro no mapa de totais. Argumento 1: %s, Argumento 2: %s", arg1, arg2);;
+            throw new BusinessException(true, "error.mapa.totais", arg1, arg2);
+        } catch (BusinessException ex) {
+            model.addAttribute("errorMsg", ex.getMessage());
+            return "error";
+        }
+
+    }
+
+//    @ExceptionHandler(BusinessException.class)
+//    public ResponseEntity<String> handleBusinessException(BusinessException ex) {
+//        return ResponseEntity.badRequest().body(ex.getMessage());
+//    }
 }
