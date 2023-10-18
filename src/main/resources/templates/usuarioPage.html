@@ -13,8 +13,6 @@
                 </button>
             </a>
 
-            
-
             <table id="tabela" class="table table-striped table-bordered custom-table">
                 <thead id="theadId" class="thead-dark custom-thead">
                     <tr class="custom-thead">
@@ -44,7 +42,6 @@
                     </tr>
                 </thead>
                 <tbody id="bodyTable">
-                
                     <tr class="custom-row" th:each="func : ${usuarioFlyway}">
                         <td th:text="${func.nome}"></td>
                         <td th:text="${func.numero}"></td>
@@ -52,7 +49,7 @@
                         <td th:text="${func.data}"></td>
                         <td class="tipo" th:text="${func.usuarioEnumTypeEnum}"></td>
                         <td class="buttons">
-                            <a id="idUserEdit" th:data-idUserEdit="@{(${func.id})}" th:href="@{/usuario/edit/{id}(id=${func.id})}"
+                            <a id="idUserEdit" th:data-idUserEditData="@{(${func.id})}" th:href="@{/usuario/edit/{id}(id=${func.id})}"
                                method="get"
                                class="idUserEditClass btn btn-warning">
                                 <i class="fa fa-pencil"></i>
@@ -66,13 +63,11 @@
                     </tr>
                 </tbody>
             </table>
+
+            <div id="tableRender"></div>
+
         </div>
 
-        <div id="tableRender"></div>
-
-        <!-- Inclua os arquivos JavaScript do Bootstrap (opcional) -->
-        <!--        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.min.js"></script>-->
         <script src="/static/js/index.js" th:src="@{/js/index.js}"></script>
-        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     </body>
 </html>
