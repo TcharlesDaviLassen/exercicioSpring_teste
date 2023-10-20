@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <title>Error Page</title>
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<head>
+    <title>Error Page</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    </head>
-    <body>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+</head>
+
+<body>
     <!--&lt;!&ndash;        <div class="alert alert-danger">&ndash;&gt;-->
     <!--&lt;!&ndash;            <p>Error occurred:</p>&ndash;&gt;-->
     <!--&lt;!&ndash;            <p th:text="${errorMsg}"></p>&ndash;&gt;-->
@@ -31,20 +33,42 @@
         </script>
     </div>
 
+
+    <!-- 
+        data-backdrop="static" // adicionado ao modal para desativar o fechamento ao clicar fora do modal
+        data-keyboard="false" //  usado para desativar o fechamento do modal quando a tecla Esc é pressionada. 
+    -->
+
     <!-- Modal -->
-    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade" 
+         id="errorModal" 
+         tabindex="-1" 
+         role="dialog" 
+         aria-labelledby="errorModalLabel"
+         aria-hidden="true" 
+         data-backdrop="static"
+         data-keyboard="true" 
+        >
+        <div class="modal-dialog" 
+             role="document"
+            >
             <div class="modal-content">
-                <div class="modal-header">
+                <div style="background-color:darkcyan;" class="modal-header">
+
                     <h5 class="modal-title" id="errorModalLabel">Erro</h5>
                     <p style="margin-left: 1rem; margin-top: .35rem" th:text="${errorMsg}">Erro personalizado</p>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                   
+                    <button type="button"
+                            class="close" 
+                            data-dismiss="modal" 
+                            aria-label="Close"
+                        >
+
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-<!--                    <p th:text="${errorMsg}">Erro desconhecido.</p>-->
+                    <!-- <p th:text="${errorMsg}">Erro desconhecido.</p> -->
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
@@ -53,43 +77,44 @@
         </div>
     </div>
 
-    </body>
+</body>
 
-    <!--    <script>-->
-    <!--            &lt;!&ndash;        // Adicione este script JavaScript&ndash;&gt;-->
-    <!--            &lt;!&ndash;        function showAlert(message) {&ndash;&gt;-->
-    <!--            &lt;!&ndash;            alert("Erro: " + message);&ndash;&gt;-->
-    <!--            &lt;!&ndash;        }&ndash;&gt;-->
+<!--    <script>-->
+<!--            &lt;!&ndash;        // Adicione este script JavaScript&ndash;&gt;-->
+<!--            &lt;!&ndash;        function showAlert(message) {&ndash;&gt;-->
+<!--            &lt;!&ndash;            alert("Erro: " + message);&ndash;&gt;-->
+<!--            &lt;!&ndash;        }&ndash;&gt;-->
 
-    <!--            &lt;!&ndash;        // Exemplo de chamada de API usando JavaScript (pode variar dependendo da sua configuração)&ndash;&gt;-->
-    <!--            &lt;!&ndash;        fetch("/some-api-endpoint")&ndash;&gt;-->
-    <!--            &lt;!&ndash;            .then(response => response.text())&ndash;&gt;-->
-    <!--            &lt;!&ndash;            .then(message => {&ndash;&gt;-->
-    <!--            &lt;!&ndash;                showAlert(message);&ndash;&gt;-->
-    <!--            &lt;!&ndash;            })&ndash;&gt;-->
-    <!--            &lt;!&ndash;            .catch(error => {&ndash;&gt;-->
-    <!--            &lt;!&ndash;                console.error(error);&ndash;&gt;-->
-    <!--            &lt;!&ndash;            });&ndash;&gt;-->
+<!--            &lt;!&ndash;        // Exemplo de chamada de API usando JavaScript (pode variar dependendo da sua configuração)&ndash;&gt;-->
+<!--            &lt;!&ndash;        fetch("/some-api-endpoint")&ndash;&gt;-->
+<!--            &lt;!&ndash;            .then(response => response.text())&ndash;&gt;-->
+<!--            &lt;!&ndash;            .then(message => {&ndash;&gt;-->
+<!--            &lt;!&ndash;                showAlert(message);&ndash;&gt;-->
+<!--            &lt;!&ndash;            })&ndash;&gt;-->
+<!--            &lt;!&ndash;            .catch(error => {&ndash;&gt;-->
+<!--            &lt;!&ndash;                console.error(error);&ndash;&gt;-->
+<!--            &lt;!&ndash;            });&ndash;&gt;-->
 
 
 
-    <!--        function triggerCustomError() {-->
-    <!--            fetch("/some-api-endpoint")-->
-    <!--                .then(response => response.text())-->
-    <!--                .then(message => {-->
-    <!--                    showCustomAlert(message);-->
-    <!--                })-->
-    <!--                .catch(error => {-->
-    <!--                    console.error(error);-->
-    <!--                });-->
-    <!--        }-->
+<!--        function triggerCustomError() {-->
+<!--            fetch("/some-api-endpoint")-->
+<!--                .then(response => response.text())-->
+<!--                .then(message => {-->
+<!--                    showCustomAlert(message);-->
+<!--                })-->
+<!--                .catch(error => {-->
+<!--                    console.error(error);-->
+<!--                });-->
+<!--        }-->
 
-    <!--        function showCustomAlert(message) {-->
-    <!--            const customAlert = document.getElementById("customAlert");-->
-    <!--            const errorMessage = document.getElementById("errorMessage");-->
+<!--        function showCustomAlert(message) {-->
+<!--            const customAlert = document.getElementById("customAlert");-->
+<!--            const errorMessage = document.getElementById("errorMessage");-->
 
-    <!--            errorMessage.innerText = message;-->
-    <!--            customAlert.style.display = "block";-->
-    <!--        }-->
-    <!--    </script>-->
+<!--            errorMessage.innerText = message;-->
+<!--            customAlert.style.display = "block";-->
+<!--        }-->
+<!--    </script>-->
+
 </html>

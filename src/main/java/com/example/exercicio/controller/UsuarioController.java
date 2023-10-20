@@ -143,8 +143,6 @@ public class UsuarioController {
 
 
 
-
-
     // Teste transaction
     @Autowired
     private MultiTransactionExampleService multiTransactionExampleService;
@@ -175,7 +173,7 @@ public class UsuarioController {
     private AddressService addressService;
 
     @GetMapping("/executeOrderIdEmbedded")
-    private  void executeOrderIdEmbedded() {
+    private void executeOrderIdEmbedded() {
         Address address = new Address();
         StreetInfo streetInfo = new StreetInfo("123", "Main Street");
         address.setStreetInfo(streetInfo);
@@ -185,16 +183,14 @@ public class UsuarioController {
         addressService.createAddress(address);
     }
 
-
-
     @GetMapping("/some-api-endpoint")
     public String somePage(Model model) {
         try {
-            //  Coloque aqui o código que pode lançar BusinessException
+            // Coloque aqui o código que pode lançar BusinessException
             String arg1 = "34534637";
             String arg2 = "98667856425435";
-            // String errorMsg = String.format("Erro no mapa de totais. Argumento 1: %s, Argumento 2: %s", arg1, arg2);;
-            throw new BusinessException(true, "error.mapa.totais", arg1, arg2);
+            // String errorMsg = String.format("Erro no mapa de totais. Argumento 1: %s, Argumento 2: %s", arg1, arg2);
+            throw new BusinessException("error.mapa.totais", arg1, arg2);
         } catch (BusinessException ex) {
             model.addAttribute("errorMsg", ex.getMessage());
             return "error";
@@ -202,8 +198,8 @@ public class UsuarioController {
 
     }
 
-//    @ExceptionHandler(BusinessException.class)
-//    public ResponseEntity<String> handleBusinessException(BusinessException ex) {
-//        return ResponseEntity.badRequest().body(ex.getMessage());
-//    }
+    // @ExceptionHandler(BusinessException.class)
+    // public ResponseEntity<String> handleBusinessException(BusinessException ex) {
+    // return ResponseEntity.badRequest().body(ex.getMessage());
+    // }
 }
