@@ -1,4 +1,4 @@
-package com.example.exercicio.classUtils;
+package com.example.exercicio.Utils.classUtils;
 
 import java.io.Serializable;
 

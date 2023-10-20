@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head>
-    <title>Error Page</title>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <head>
+        <title>Error Page</title>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
@@ -34,22 +33,22 @@
     </div>
 
 
-    <!-- 
+    <!--
         data-backdrop="static" // adicionado ao modal para desativar o fechamento ao clicar fora do modal
-        data-keyboard="false" //  usado para desativar o fechamento do modal quando a tecla Esc é pressionada. 
+        data-keyboard="false" //  usado para desativar o fechamento do modal quando a tecla Esc é pressionada.
     -->
 
     <!-- Modal -->
-    <div class="modal fade" 
-         id="errorModal" 
-         tabindex="-1" 
-         role="dialog" 
+    <div class="modal fade"
+         id="errorModal"
+         tabindex="-1"
+         role="dialog"
          aria-labelledby="errorModalLabel"
-         aria-hidden="true" 
+         aria-hidden="true"
          data-backdrop="static"
-         data-keyboard="true" 
+         data-keyboard="true"
         >
-        <div class="modal-dialog" 
+        <div class="modal-dialog"
              role="document"
             >
             <div class="modal-content">
@@ -57,10 +56,10 @@
 
                     <h5 class="modal-title" id="errorModalLabel">Erro</h5>
                     <p style="margin-left: 1rem; margin-top: .35rem" th:text="${errorMsg}">Erro personalizado</p>
-                   
+
                     <button type="button"
-                            class="close" 
-                            data-dismiss="modal" 
+                            class="close"
+                            data-dismiss="modal"
                             aria-label="Close"
                         >
 

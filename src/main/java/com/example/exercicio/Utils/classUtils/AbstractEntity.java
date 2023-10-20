@@ -1,7 +1,4 @@
-package com.example.exercicio.classUtils;
-
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.MappedSuperclass;
+package com.example.exercicio.Utils.classUtils;
 
 import java.io.Serializable;
 
