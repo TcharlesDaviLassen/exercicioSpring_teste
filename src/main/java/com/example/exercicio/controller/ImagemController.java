@@ -13,10 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/imagens")
@@ -56,32 +53,25 @@ public class ImagemController {
         //        return "Imagem salva com sucesso. ID: " + imagem.getId();
     }
 
-//    @GetMapping("/download/{id}")
+    //    @GetMapping("/download/{id}")
     @PostMapping("/downloadImagem")
     public String downloadImagem(@RequestBody ImagesDownloadRequestDTO imagesDownloadRequestDTO) {
         Long id = imagesDownloadRequestDTO.getId();
         String destinationDirectory = imagesDownloadRequestDTO.getDestinationDirectory();
 
-            //        for (Long id : ids) {
-            Images imagem = imagemRepository.findById(id).orElse(null);
-            if (imagem != null) {
-                String destinationPath = destinationDirectory + "/" + imagem.getNome();
-                try (FileOutputStream outputStream = new FileOutputStream(destinationPath)) {
-                    outputStream.write(imagem.getDados());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return "Erro ao salvar a imagem: " + e.getMessage();
-                }
+        Images imagem = imagemRepository.findById(id).orElse(null);
+        if (imagem != null) {
+            String destinationPath = destinationDirectory + "/" + imagem.getNome();
+            try (FileOutputStream outputStream = new FileOutputStream(destinationPath)) {
+                outputStream.write(imagem.getDados());
+            } catch (IOException e) {
+                e.printStackTrace();
+                return "Erro ao salvar a imagem: " + e.getMessage();
             }
-            //        }
+        }
 
         return "Imagens baixadas e salvas com sucesso no diretório: " + destinationDirectory;
 
-        //        Images imagem = imagemRepository.findById(id).orElse(null);
-        //        if (imagem != null) {
-        //            return imagem.getDados();
-        //        }
-        //        return null;
     }
 
 
@@ -133,9 +123,9 @@ public class ImagemController {
 
     @PostMapping("/downloadsImages")
     public String postDownloadImages(@RequestBody ImagesDownloadRequestDTO responseDTO) {
+
         List<String> imageUrls = responseDTO.getImageUrls();
         String destinationDirectory = responseDTO.getDestinationDirectory();
-
 
         File directory = new File(destinationDirectory);
         if (!directory.exists()) {
@@ -145,7 +135,50 @@ public class ImagemController {
         int count = 1;
 
         for (String imageUrl : imageUrls) {
-            String destinationPath = destinationDirectory + "/image" + count + ".png";
+            String destinationPath = destinationDirectory + "/image" + count + ".jpg";
+            count++;
+
+            try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+                HttpGet httpGet = new HttpGet(imageUrl);
+                try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
+                    if (response.getStatusLine().getStatusCode() == 200) {
+                        try (InputStream inputStream = response.getEntity().getContent()) {
+                            try (FileOutputStream outputStream = new FileOutputStream(destinationPath)) {
+                                int bytesRead;
+                                byte[] buffer = new byte[1024];
+                                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                                    outputStream.write(buffer, 0, bytesRead);
+                                }
+                            }
+                        }
+                    } else {
+                        return "Falha ao baixar a imagem. Código de resposta HTTP: " + response.getStatusLine().getStatusCode();
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                return "Erro durante o download das imagens: " + e.getMessage();
+            }
+        }
+
+        return "Imagens baixadas com sucesso.";
+    }
+
+    @PostMapping("/postDownloadImagesExtension")
+    public String postDownloadImagesExtension(@RequestBody ImagesDownloadRequestDTO responseDTO) {
+        List<String> imageUrls = responseDTO.getImageUrls();
+        String destinationDirectory = responseDTO.getDestinationDirectory();
+
+        File directory = new File(destinationDirectory);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
+        int count = 0;
+
+        for (String imageUrl : imageUrls) {
+            String extension = imageUrl.substring(imageUrl.lastIndexOf("."));
+            String destinationPath = destinationDirectory + "/image" + UUID.randomUUID().toString() + extension.substring(0 , 4);
             count++;
 
             try (CloseableHttpClient httpClient = HttpClients.createDefault()) {

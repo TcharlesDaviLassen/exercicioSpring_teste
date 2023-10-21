@@ -73,8 +73,7 @@ Esses são exemplos de como as anotações @Transient e @EmbeddedId são usadas 
 Suponha que você deseje criar uma entidade Order que possui uma chave primária incorporada que consiste no número do pedido e no ID do cliente. Aqui está como você pode fazer isso:
 
 Defina a classe de entidade Order com a chave primária incorporada:
-java
-Copy code
+```java
 @Entity
 public class Order {
 @EmbeddedId
@@ -85,9 +84,11 @@ private OrderId id;
 
     // Outros campos e métodos getters/setters
 }
+```
+
 Em seguida, crie a classe OrderId como uma classe incorporada para representar a chave primária composta (ID incorporado) do pedido:
-java
-Copy code
+
+```java
 @Embeddable
 public class OrderId implements Serializable {
 @Column(name = "order_number")
@@ -98,9 +99,11 @@ private String orderNumber;
 
     // Construtores, getters e setters
 }
+```
+
 Agora, você pode criar uma classe de serviço ou controlador para persistir e recuperar pedidos:
-java
-Copy code
+
+```java
 @Service
 public class OrderService {
 @Autowired
@@ -114,52 +117,56 @@ private OrderRepository orderRepository;
         return orderRepository.findById(id).orElse(null);
     }
 }
+```
+
 Certifique-se de criar um repositório (OrderRepository) que estende JpaRepository para permitir a persistência e consulta dos pedidos:
-java
-Copy code
+```java
 public interface OrderRepository extends JpaRepository<Order, OrderId> {
 }
+```
+
 Agora você pode criar e recuperar pedidos usando a chave primária incorporada OrderId. Por exemplo:
 
-java
-Copy code
+```java
 OrderId orderId = new OrderId("12345", 1L); // Número do pedido e ID do cliente
 Order order = new Order(orderId, "Product ABC", 5);
 orderService.createOrder(order);
 
 Order retrievedOrder = orderService.getOrder(orderId);
+```
+
 Este exemplo ilustra o uso da anotação @EmbeddedId para criar uma chave primária incorporada em uma entidade Spring Boot.
 
+#
+#
 
+### Exemplo usando somente @Embedded
 
-
-User
-agora crie um exemplo usando somente @Embedded
-ChatGPT
 Claro! Aqui está um exemplo de como usar somente a anotação @Embedded no Spring Boot para representar campos incorporados em uma entidade.
 
 Vamos criar uma entidade Address que possui campos incorporados, como número da rua, nome da rua, cidade e estado:
 
 Defina a classe de entidade Address com campos incorporados:
-java
-Copy code
+```java
 @Entity
 public class Address {
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-private Long id;
-
-    @Embedded
-    private StreetInfo streetInfo;
-
-    private String city;
-    private String state;
-
-    // Outros campos e métodos getters/setters
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+        @Embedded
+        private StreetInfo streetInfo;
+    
+        private String city;
+        private String state;
+    
+        // Outros campos e métodos getters/setters
 }
+```
+
 Crie a classe StreetInfo como uma classe incorporada para representar os campos relacionados à rua:
-java
-Copy code
+
+```java
 @Embeddable
 public class StreetInfo {
 @Column(name = "street_number")
@@ -170,12 +177,13 @@ private String streetNumber;
 
     // Construtores, getters e setters
 }
+```
+
 A classe Address utiliza a anotação @Embedded para incorporar a classe StreetInfo, representando os campos relacionados à rua.
 
 Agora você pode criar e persistir objetos Address:
 
-java
-Copy code
+```java
 Address address = new Address();
 StreetInfo streetInfo = new StreetInfo("123", "Main Street");
 address.setStreetInfo(streetInfo);
@@ -183,6 +191,8 @@ address.setCity("Sample City");
 address.setState("Sample State");
 
 addressRepository.save(address);
+```
+
 Este exemplo ilustra o uso da anotação @Embedded para criar campos incorporados em uma entidade Spring Boot. Nesse caso, a classe StreetInfo é incorporada à classe Address, permitindo que você acesse os campos da rua como parte da entidade Address.
 
 
