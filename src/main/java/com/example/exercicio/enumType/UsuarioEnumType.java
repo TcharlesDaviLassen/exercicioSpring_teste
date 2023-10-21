@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.io.IOException;
-@JsonDeserialize(using = UsuarioEnumTypeDeserializer.class)
+//@JsonDeserialize(using = UsuarioEnumTypeDeserializer.class)
 public enum UsuarioEnumType implements RequireTypes {
 
 //    NOME("N", "NOME"),
@@ -66,5 +66,10 @@ public enum UsuarioEnumType implements RequireTypes {
 //            return UsuarioEnumType.N; // Substitua pelo valor padrão desejado
 //        }
 //    }
+
+    @Override
+    public String toString() {
+        return description; // Retorna a descrição ao chamar toString()
+    }
 }
 

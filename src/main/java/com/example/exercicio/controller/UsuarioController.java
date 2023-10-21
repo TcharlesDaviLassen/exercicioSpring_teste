@@ -17,10 +17,12 @@ import jakarta.validation.Valid;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.engine.util.JRSaver;
 import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import net.sf.jasperreports.view.JasperViewer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,11 +32,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.awt.*;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.sql.Array;
 import java.sql.Connection;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/usuario")
@@ -229,7 +234,7 @@ public class UsuarioController {
             //        parameters.put("subTituloRelatorio", "Relatório de Produtos do trabalho spring teste");
             //
             //        // Especificar o caminho do arquivo JRXML do relatório
-            //        String reportTemplatePath = "/home/flexabus/devel/workspaces/flexabus-external-resources/reports/TESTE/jasperPDF_teste.jrxml";
+//                    String reportTemplatePath = "/home/flexabus/devel/workspaces/flexabus-external-resources/reports/TESTE/jasperPDF_teste.jrxml";
             //
             //        // Compilar o relatório a partir do arquivo JRXML
             //        JasperReport jasperReport = JasperCompileManager.compileReport(reportTemplatePath);
@@ -256,53 +261,112 @@ public class UsuarioController {
             //        outStream.close();
 
 
-            //            var findByAllUsers = usuarioFlywayService.findByAll();
-            //            //// Converter a lista de findByAllUsers em um JRBeanCollectionDataSource
-            //            //// JRBeanCollectionDataSource: Esta é uma classe do JasperReports que permite criar uma fonte de dados a partir de uma coleção de objetos Java (no seu caso, objetos representando registros de usuários).
-            //            JRBeanCollectionDataSource beanDataSource = new JRBeanCollectionDataSource(findByAllUsers);
-            //
-            //            Map<String, Object> parameters = new HashMap<>();
-            //            parameters.put("tituloRelatorio", "Relatório de Produtos");
-            //            parameters.put("subTituloRelatorio", "Relatório de Produtos do trabalho spring teste");
-            //
-            //            //// para compilar o relatório JasperReports. O método compileReport é usado para compilar o arquivo JRXML no caminho especificado em reportTemplatePath. O resultado compilado é armazenado na variável jasperReport.
-            //            String reportTemplatePath = "/home/flexabus/devel/workspaces/flexabus-external-resources/reports/TESTE/jasperPDF_teste.jasper";
-            ////            JasperReport jasperReport = JasperCompileManager.compileReport(reportTemplatePath);
-            //
-            //            //// Compilar o relatório JRXML
-            //            JasperPrint jasperPrint = JasperFillManager.fillReport(reportTemplatePath, parameters, beanDataSource );
-            //            //   new JREmptyDataSource() //  é um fornecedor de dados vazio.
-            //
-            //            // Configurar a resposta HTTP para um PDF
-            //            response.setContentType("application/pdf");
-            //            // Isso configura o cabeçalho da resposta HTTP para definir o nome do arquivo e como o navegador deve manipulá-lo.
-            //            // Neste caso, "inline" indica que o navegador deve exibir o PDF no navegador, e "filename=relatorio.pdf" define o nome do arquivo.
-            //            response.setHeader("Content-Disposition", "inline; filename=relatorio.pdf");
-            //
-            //            // Exportar o relatório para um fluxo de saída
-            //            // obtém um fluxo de saída a partir do objeto
-            //            // usado para exportar o relatório no formato PDF.
-            //            OutputStream outStream = response.getOutputStream();
-            //            JRPdfExporter exporter = new JRPdfExporter();
-            //
-            //            // Aqui, definimos o relatório a ser exportado como entrada para o exportador.
-            //            exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-            //
-            //            // Configuramos o fluxo de saída para o exportador, que enviará o PDF para o outStream
-            //            exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(outStream));
-            //
-            //            // Isso efetivamente exporta o relatório para o fluxo de saída, criando o PDF.
-            //            exporter.exportReport();
-            //
-            //            //// Visualizar o relatório
-            //            JasperViewer viewer = new JasperViewer(jasperPrint, false);
-            //            viewer.setVisible(true);
-            //
-            //            String filePath = "/home/flexabus/Downloads/ExercicoSpring_teste/PDF_Docs/" + UUID.randomUUID().toString() + "_usuarios.pdf";
-            //            JasperExportManager.exportReportToPdfFile(jasperPrint, filePath);
-            //
-            //            outStream.flush(); //// Isso limpa qualquer buffer de saída pendente.
-            //            outStream.close(); ////  Isso fecha o fluxo de saída.
+
+//            var findByAllUsers = usuarioFlywayService.findByAll();
+//            List<UsuarioFlyway> usuarioAdd = new ArrayList<>();
+//
+//            UsuarioFlyway usuario = new UsuarioFlyway();
+//
+//            for (var i = 0; i < findByAllUsers.size(); i++) {
+//                usuario.setNome(findByAllUsers.get(i).getNome());
+//                usuario.setEmail(findByAllUsers.get(i).getEmail());
+//                usuario.setData(findByAllUsers.get(i).getData());
+//
+//            usuarioAdd.add(usuario);
+//
+//            //// Converter a lista de findByAllUsers em um JRBeanCollectionDataSource
+//            //// JRBeanCollectionDataSource: Esta é uma classe do JasperReports que permite criar uma fonte de dados a partir de uma coleção de objetos Java.
+//            JRBeanCollectionDataSource beanDataSource = new JRBeanCollectionDataSource(usuarioAdd);
+//
+//            String caminhoImagem = "/home/tcharles/Imagens/Capturas de tela/Captura de tela de 2023-06-08 11-33-45.png";
+//
+//            Map<String, Object> parameters = new HashMap<>();
+//            parameters.put("tituloRelatorio", "Relatório de Produtos");
+//            parameters.put("subTituloRelatorio", "Relatório de Produtos do trabalho spring teste");
+//            parameters.put("caminhoImagem", caminhoImagem);
+//            for (int i = 0; i < findByAllUsers.size(); i++) {
+//                parameters.put("usuario_enum_type_enum", findByAllUsers.get(i).getUsuarioEnumTypeEnum());
+//            }
+//
+//            //// para compilar o relatório JasperReports. O método compileReport é usado para compilar o arquivo JRXML no caminho especificado em reportTemplatePath. O resultado compilado é armazenado na variável jasperReport.
+//            String reportTemplatePath = "/home/tcharles/JaspersoftWorkspace/MyReports/jasperPDF_teste.jrxml";
+//            JasperReport jasperReport = JasperCompileManager.compileReport(reportTemplatePath);
+//
+//            //// Compilar o relatório JRXML
+//            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, beanDataSource );
+//            //   new JREmptyDataSource() //  é um fornecedor de dados vazio.
+//
+//            // Configurar a resposta HTTP para um PDF
+////            response.setContentType("application/pdf");
+//
+//            // Isso configura o cabeçalho da resposta HTTP para definir o nome do arquivo e como o navegador deve manipulá-lo.
+//            // Neste caso, "inline" indica que o navegador deve exibir o PDF no navegador, e "filename=relatorio.pdf" define o nome do arquivo.
+////            response.setHeader("Content-Disposition", "inline; filename=relatorio.pdf");
+//
+//            // Exportar o relatório para um fluxo de saída
+////            OutputStream outStream = response.getOutputStream();
+//
+//            // obtém um fluxo de saída a partir do objeto
+//            // usado para exportar o relatório no formato PDF.
+////            JRPdfExporter exporter = new JRPdfExporter();
+//
+//            // Aqui, definimos o relatório a ser exportado como entrada para o exportador.
+////            exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+//
+//            // Configuramos o fluxo de saída para o exportador, que enviará o PDF para o outStream
+////            exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(outStream));
+//
+//            // Isso efetivamente exporta o relatório para o fluxo de saída, criando o PDF.
+////            exporter.exportReport();
+//
+//            //// Visualizar o relatório
+////            JasperViewer viewer = new JasperViewer(jasperPrint, false);
+////            viewer.setVisible(true);
+//
+//            String filePath = "/home/tcharles/Área de Trabalho/Spring-Boot_Exemples/exercicioSpring_teste/PDFS/" + UUID.randomUUID().toString() + "_usuarios.pdf";
+//            JasperExportManager.exportReportToPdfFile(jasperPrint, filePath);
+//
+////            outStream.flush(); //// Isso limpa qualquer buffer de saída pendente.
+////            outStream.close(); ////  Isso fecha o fluxo de saída.
+
+
+//            // Obtenha a lista de usuários
+//            List<UsuarioFlyway> usuarios = usuarioFlywayService.findByAll();
+//
+//            // Crie uma lista para armazenar os usuários a serem usados no relatório
+//            List<UsuarioFlyway> usuariosParaRelatorio = new ArrayList<>();
+//
+//            // Preencha a lista 'usuariosParaRelatorio' com os dados dos usuários
+//            for (UsuarioFlyway usuario : usuarios) {
+//                UsuarioFlyway usuarioRelatorio = new UsuarioFlyway();
+//                usuarioRelatorio.setNome(usuario.getNome());
+//                usuarioRelatorio.setEmail(usuario.getEmail());
+//                usuarioRelatorio.setData(usuario.getData());
+//                usuarioRelatorio.setUsuarioEnumTypeEnum(usuario.getUsuarioEnumTypeEnum());
+//                usuariosParaRelatorio.add(usuarioRelatorio);
+//            }
+//
+//            // Converta a lista 'usuariosParaRelatorio' em um JRBeanCollectionDataSource
+//            JRBeanCollectionDataSource beanDataSource = new JRBeanCollectionDataSource(usuariosParaRelatorio);
+//
+//            // Outros parâmetros do relatório
+//            String caminhoImagem = "/home/tcharles/Imagens/Capturas de tela/Captura de tela de 2023-06-08 11-33-45.png";
+//            Map<String, Object> parameters = new HashMap<>();
+//            parameters.put("tituloRelatorio", "Relatório de Usuários");
+//            parameters.put("subTituloRelatorio", "Relatório de Usuários do Spring Boot");
+//            parameters.put("caminhoImagem", caminhoImagem);
+//
+//            // para compilar o relatório JasperReports
+//            String reportTemplatePath = "/home/tcharles/JaspersoftWorkspace/MyReports/jasperPDF_teste.jrxml";
+//            JasperReport jasperReport = JasperCompileManager.compileReport(reportTemplatePath);
+//
+//            // Compilar o relatório JRXML
+//            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, beanDataSource);
+//
+//            // Exportar o relatório para um arquivo PDF
+//            String filePath = "/home/tcharles/Área de Trabalho/Spring-Boot_Exemples/exercicioSpring_teste/PDFS/" + UUID.randomUUID().toString() + "_usuarios.pdf";
+//            JasperExportManager.exportReportToPdfFile(jasperPrint, filePath);
+
 
 
             //            var findByAllUsers = usuarioFlywayService.findByAll();
@@ -328,22 +392,72 @@ public class UsuarioController {
 
 
 
-            //            var findByAllUsers = usuarioFlywayService.findByAll();
-            //            JRBeanCollectionDataSource beanDataSource = new JRBeanCollectionDataSource(findByAllUsers);
-            //
-            //            String reportTemplatePath = "/home/flexabus/devel/workspaces/flexabus-external-resources/reports/TESTE/jasperPDF_teste.jasper";
-            //
-            //            // Preencher os parâmetros do relatório, se houver
-            //            Map<String, Object> parameters = new HashMap<>();
-            //            parameters.put("tituloRelatorio", "Relatório de Produtos");
-            //            parameters.put("subTituloRelatorio", "Relatório de Produtos do trabalho spring teste");
-            //
-            //            // Criar a fonte de dados JRBeanCollectionDataSource
-            //            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(findByAllUsers);
-            //
-            //            // Preencher o relatório com os dados
-            //            JasperPrint jasperPrint = JasperFillManager.fillReport(reportTemplatePath, parameters, dataSource);
-            //
+            var findByAllUsers = usuarioFlywayService.findByAll();
+            String reportTemplatePath = "/home/tcharles/JaspersoftWorkspace/MyReports/jasperPDF_teste.jrxml";
+
+            //            UsuarioFlyway usuarioEnumType = new UsuarioFlyway();
+            //            String enumValue = "";
+
+            //            for (UsuarioEnumType dado : UsuarioEnumType.values()) {
+            //                for (int i = 0; i < findByAllUsers.size(); i++) {
+            //                    if(findByAllUsers.get(i).getUsuarioEnumTypeEnum() != null)
+            //                        enumValue = dado.name();
+            //                }
+            //            }
+
+
+            //            for (int i = 0; i < findByAllUsers.size(); i++) {
+            //                usuarioEnumType.setUsuarioEnumTypeEnum(findByAllUsers.get(i).getUsuarioEnumTypeEnum());
+            //            }
+
+            // Carregar e compilar o JRXML
+            JasperReport jasperReport = JasperCompileManager.compileReport(reportTemplatePath);
+
+            // Preencher os parâmetros do relatório, se houver
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("tituloRelatorio", "Relatório de Produtos");
+            parameters.put("subTituloRelatorio", "Relatório de Produtos do trabalho spring teste");
+
+            //            List<String> enumNames = Arrays.stream(UsuarioEnumType.values())
+            //                    .map(Enum::name)
+            //                    .collect(Collectors.toList());
+
+            parameters.put("usuario_enum_type_enum",  UsuarioEnumType.E.toString());
+
+            // Criar a fonte de dados JRBeanCollectionDataSource
+            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(findByAllUsers);
+
+            // Preencher o relatório com os dados
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+
+
+            // Configurar a resposta HTTP para um PDF
+            // Isso configura o cabeçalho da resposta HTTP para definir o nome do arquivo e como o navegador deve manipulá-lo.
+            // Neste caso, "inline" indica que o navegador deve exibir o PDF no navegador, e "filename=relatorio.pdf" define o nome do arquivo.
+            response.setContentType("application/pdf");
+            response.setHeader("Content-Disposition", "inline; filename=relatorio.pdf");
+
+            // Exportar o relatório para um fluxo de saída
+            OutputStream outStream = response.getOutputStream();
+
+            // obtém um fluxo de saída a partir do objeto
+            // usado para exportar o relatório no formato PDF.
+            JRPdfExporter exporter = new JRPdfExporter();
+
+            // Aqui, definimos o relatório a ser exportado como entrada para o exportador.
+            exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+
+            // Configuramos o fluxo de saída para o exportador, que enviará o PDF para o outStream
+            exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(outStream));
+
+            // Isso efetivamente exporta o relatório para o fluxo de saída, criando o PDF.
+            exporter.exportReport();
+
+
+            // Exportar o relatório para um arquivo PDF
+            String filePath = "/home/tcharles/Área de Trabalho/Spring-Boot_Exemples/exercicioSpring_teste/PDFS/" + UUID.randomUUID().toString() + "_usuarios.pdf";
+            JasperExportManager.exportReportToPdfFile(jasperPrint, filePath);
+
             //            // Visualizar o relatório
             //            JasperViewer viewer = new JasperViewer(jasperPrint, false);
             //            viewer.setVisible(true);

@@ -7,6 +7,8 @@ import com.example.exercicio.errorsUtils.customRuntimeExempion.CustomException;
 import com.example.exercicio.repository.UsuarioFlywayRepository;
 import com.example.exercicio.repository.repositoryDAOImpl.UsuarioFlywayRepositoryDAOImpl;
 import com.example.exercicio.service.UsuarioFlywayService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -22,10 +24,12 @@ public class UsuarioFlywayServiceImpl implements UsuarioFlywayService {
 
     private final UsuarioFlywayRepository usuarioRepository;
     private final UsuarioFlywayRepositoryDAOImpl usuarioFlywayRepositoryDAO;
+    private final EntityManager entityManager;
     @Autowired
-    public UsuarioFlywayServiceImpl(UsuarioFlywayRepository usuarioRepository, UsuarioFlywayRepositoryDAOImpl usuarioFlywayRepositoryDAO) {
+    public UsuarioFlywayServiceImpl(UsuarioFlywayRepository usuarioRepository, UsuarioFlywayRepositoryDAOImpl usuarioFlywayRepositoryDAO, EntityManager entityManager) {
         this.usuarioRepository = usuarioRepository;
         this.usuarioFlywayRepositoryDAO = usuarioFlywayRepositoryDAO;
+        this.entityManager = entityManager;
     }
 
     @Override
@@ -167,5 +171,16 @@ public class UsuarioFlywayServiceImpl implements UsuarioFlywayService {
     @Override
     public List<UsuarioFlyway> findByNomeAndEmail(String nome, String email) {
         return usuarioRepository.findByNomeAndEmail(nome, email);
+    }
+
+
+    public List<String> getEnumListFromDatabase() {
+        // Substitua "UsuarioEntity" pelo nome da sua entidade que contém a enumeração.
+        String sql = "SELECT DISTINCT usuario_enum_type_enum FROM usuario_flyway";
+
+        Query query = entityManager.createNativeQuery(sql);
+        List<String> enumNames = query.getResultList();
+
+        return enumNames;
     }
 }
