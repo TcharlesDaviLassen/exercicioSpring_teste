@@ -1,5 +1,6 @@
 package com.example.exercicio.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 @Entity
@@ -7,10 +8,12 @@ public class Images {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty("id")
     private Long id;
 
     @Lob
     @Basic(fetch=FetchType.LAZY)
+    @JsonProperty("destinationDirectory")
     private byte[] dados;
 
     private String nome;

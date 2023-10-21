@@ -1,5 +1,6 @@
 package com.example.exercicio.controller;
 
+import com.example.exercicio.DTO.ImagesDownloadRequestDTO;
 import com.example.exercicio.entities.Images;
 import com.example.exercicio.repository.ImagemRepository;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -10,10 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import javax.imageio.ImageIO;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -22,7 +24,7 @@ public class ImagemController {
     @Autowired
     private ImagemRepository imagemRepository;
 
-    @PostMapping("/upload")
+    @PostMapping("/uploads")
     public String uploadImagem(@RequestParam("file") List<MultipartFile> files) throws IOException {
 
         for (MultipartFile file : files) {
@@ -56,9 +58,11 @@ public class ImagemController {
 
 //    @GetMapping("/download/{id}")
     @PostMapping("/downloadImagem")
-    public String downloadImagem(@RequestBody Long id, @RequestBody String destinationDirectory) {
+    public String downloadImagem(@RequestBody ImagesDownloadRequestDTO imagesDownloadRequestDTO) {
+        Long id = imagesDownloadRequestDTO.getId();
+        String destinationDirectory = imagesDownloadRequestDTO.getDestinationDirectory();
 
-//        for (Long id : ids) {
+            //        for (Long id : ids) {
             Images imagem = imagemRepository.findById(id).orElse(null);
             if (imagem != null) {
                 String destinationPath = destinationDirectory + "/" + imagem.getNome();
@@ -69,7 +73,7 @@ public class ImagemController {
                     return "Erro ao salvar a imagem: " + e.getMessage();
                 }
             }
-//        }
+            //        }
 
         return "Imagens baixadas e salvas com sucesso no diretório: " + destinationDirectory;
 
@@ -78,6 +82,27 @@ public class ImagemController {
         //            return imagem.getDados();
         //        }
         //        return null;
+    }
+
+
+    @PostMapping("/downloadDeTodasAsImagens")
+    public String downloadDeTodasAsImagens(@RequestBody ImagesDownloadRequestDTO imagesDownloadRequestDTO) {
+        String destinationDirectory = imagesDownloadRequestDTO.getDestinationDirectory();
+
+        List<Images> imagens = imagemRepository.findAll();
+
+        for (Images imagem : imagens) {
+            if (imagem != null) {
+                String destinationPath = destinationDirectory + "/" + imagem.getNome();
+                try (FileOutputStream outputStream = new FileOutputStream(destinationPath)) {
+                    outputStream.write(imagem.getDados());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return "Erro ao salvar a imagem: " + e.getMessage();
+                }
+            }
+        }
+        return "Imagens baixadas e salvas com sucesso no diretório: " + destinationDirectory;
     }
 
     @GetMapping("/download/{imageUrl}/{destinationPath}")
@@ -106,9 +131,12 @@ public class ImagemController {
         }
     }
 
-
     @PostMapping("/downloadsImages")
-    public String postDownloadImages(@RequestBody List<String> imageUrls, @RequestBody String destinationDirectory) {
+    public String postDownloadImages(@RequestBody ImagesDownloadRequestDTO responseDTO) {
+        List<String> imageUrls = responseDTO.getImageUrls();
+        String destinationDirectory = responseDTO.getDestinationDirectory();
+
+
         File directory = new File(destinationDirectory);
         if (!directory.exists()) {
             directory.mkdirs();
@@ -117,7 +145,7 @@ public class ImagemController {
         int count = 1;
 
         for (String imageUrl : imageUrls) {
-            String destinationPath = destinationDirectory + "/image" + count + ".jpg";
+            String destinationPath = destinationDirectory + "/image" + count + ".png";
             count++;
 
             try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
@@ -145,4 +173,85 @@ public class ImagemController {
 
         return "Imagens baixadas com sucesso.";
     }
+
+    @PostMapping("/lerTodasAsImagensDeUmaPasta")
+    public String lerTodasAsImagensDeUmaPasta() throws IOException {
+        int totdasImagens = 0;
+        int imagensPorTamanho = 0;
+
+        String pathLocalhostDirectoryPath = "/home/tcharles/Imagens/Capturas de tela";
+        List<File> imageFiles = getImagesInDirectory(pathLocalhostDirectoryPath);
+
+        for (File imageFile : imageFiles) {
+            var arraiDados =  imageFile.toString().split("\\.");
+            var pngImage =  "."+arraiDados[1];
+
+            if(pngImage.endsWith(".png")) {
+                var tamanhoTotalImage = 6 * 1024 * 1024;
+
+                if(imageFile.length() <= tamanhoTotalImage) {
+                    System.out.println("Caminho absoluto: " + imageFile.getAbsolutePath());
+                    System.out.println("Nome do arquivo: imagensPorTamanho " + imagensPorTamanho++ + " " + imageFile.getName());
+                    System.out.println("Tamanho do arquivo: imagensPorTamanho " + imageFile.length() + " bytes");
+
+                    Images imagem = new Images();
+                    imagem.setNome(imageFile.getName());
+                    File file = new File(String.valueOf(imageFile));
+                    byte[] fileBytes = convertFileToByteArray(file);
+                    imagem.setDados(fileBytes);
+
+                    imagemRepository.save(imagem);
+                } else {
+                    System.out.println("Caminho absoluto: " + imageFile.getAbsolutePath());
+                    System.out.println("Nome do arquivo: totdasImagens" + totdasImagens++ + " " + imageFile.getName());
+                    System.out.println("Tamanho do arquivo: totdasImagens " + imageFile.length() + " bytes");
+                }
+            } else {
+                return  "A imagem não é uma imagem válida, o formato deve ser um .png";
+            }
+        }
+
+        return "Imagens lidas com sucesso.";
+    }
+
+    public static List<File> getImagesInDirectory(String directoryPath) {
+        List<File> imageFiles = new ArrayList<>();
+        File directory = new File(directoryPath);
+
+        if (directory.exists() && directory.isDirectory()) {
+            File[] files = directory.listFiles();
+
+            if (files != null) {
+                for (File file : files) {
+                    if (isImage(file)) {
+                        imageFiles.add(file);
+                    }
+                }
+            }
+        }
+
+        return imageFiles;
+    }
+
+    public static boolean isImage(File file) {
+        try {
+            // Tente ler o arquivo de imagem
+            ImageIO.read(file);
+            return true;
+        } catch (IOException e) {
+            // O arquivo não é uma imagem válida
+            return false;
+        }
+    }
+
+    public static byte[] convertFileToByteArray(File file) throws IOException {
+        FileInputStream fileInputStream = new FileInputStream(file);
+        byte[] fileBytes = new byte[(int) file.length()]; // Tamanho do array igual ao tamanho do arquivo
+
+        fileInputStream.read(fileBytes);
+        fileInputStream.close();
+
+        return fileBytes;
+    }
+
 }
