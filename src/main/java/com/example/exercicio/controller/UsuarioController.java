@@ -3,7 +3,6 @@ package com.example.exercicio.controller;
 import com.example.exercicio.DTO.User;
 import com.example.exercicio.DTO.UsuarioDTO;
 import com.example.exercicio.entities.*;
-import com.example.exercicio.enumType.ReportEntity;
 import com.example.exercicio.enumType.UsuarioEnumType;
 import com.example.exercicio.errorsUtils.BusinessException.BusinessException;
 import com.example.exercicio.errorsUtils.customRuntimeExempion.CustomException;
@@ -428,12 +427,14 @@ public class UsuarioController {
             System.out.println("ERRO NO JASPERSOFT NA CLASSE DE UsuarioController: " + e.getStatus() + " " + e.getMessage());
         } catch (JRException e) {
             throw new RuntimeException("Erro no JasperReports: " + e.getMessage(), e);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
 //        catch (IOException e) {
 //            throw new RuntimeException("Erro de E/S: " + e.getMessage(), e);
 //        }
+
 
     }
 }

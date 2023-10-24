@@ -12,12 +12,18 @@ public class BusinessException extends RuntimeException {
     private String[] args;
     private boolean forceParse;
 
+    public BusinessException() {
+    }
+
     public BusinessException(final String message, final String... args) {
         super(formatMessage(message, args));
+        // super(message);
         this.args = args;
+        // setArgs(args);
     }
 
     private static String formatMessage(String messageKey, String... args) {
+
         ResourceBundle resourceBundle = ResourceBundle.getBundle("messages");
         String message = resourceBundle.getString(messageKey);
 
@@ -30,13 +36,12 @@ public class BusinessException extends RuntimeException {
         this.forceParse = forceParse;
     }
 
-
-    //    public BusinessException(final boolean forceParse, final String message, final String... args) {
-    //        super(message);
-    //        this.args = args;
-    //        this.forceParse = forceParse;
-    //    }
-
+    // public BusinessException(final boolean forceParse, final String message,
+    // final String... args) {
+    // super(message);
+    // this.args = args;
+    // this.forceParse = forceParse;
+    // }
 
     public BusinessException(final String message) {
         super(message);

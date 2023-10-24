@@ -1,0 +1,44 @@
+<!--&lt;!&ndash; Arquivo logback-spring.xml (coloque na pasta resources) &ndash;&gt;-->
+
+<!--&lt;!&ndash; <configuration>-->
+<!--    <appender name="fileAppender" class="ch.qos.logback.core.FileAppender">-->
+<!--        <file>logs.log</file>-->
+<!--        <encoder>-->
+<!--            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>-->
+<!--        </encoder>-->
+<!--    </appender>-->
+
+<!--    <logger name="com.seuapp" level="INFO"/>-->
+
+<!--    <root level="INFO">-->
+<!--        <appender-ref ref="fileAppender"/>-->
+<!--    </root>-->
+<!--</configuration> &ndash;&gt;-->
+
+
+<configuration>
+
+<!--    &lt;!&ndash; Define o nível de log para o logger raiz (root logger) &ndash;&gt;-->
+<!--    <root level="INFO">-->
+<!--        &lt;!&ndash; Associa o logger raiz ao console &ndash;&gt;-->
+<!--        <appender-ref ref="consoleAppender" />-->
+<!--        &lt;!&ndash; Associa o logger raiz ao arquivo de log &ndash;&gt;-->
+<!--        <appender-ref ref="fileAppender" />-->
+<!--    </root>-->
+
+<!--    &lt;!&ndash; Configuração do apêndice para a saída no console &ndash;&gt;-->
+<!--    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">-->
+<!--        <encoder>-->
+<!--            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>-->
+<!--        </encoder>-->
+<!--    </appender>-->
+
+<!--    &lt;!&ndash; Configuração do apêndice para registro em arquivo &ndash;&gt;-->
+<!--    <appender name="fileAppender" class="ch.qos.logback.core.FileAppender">-->
+<!--        <file>logs.log</file>-->
+<!--        <encoder>-->
+<!--            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>-->
+<!--        </encoder>-->
+<!--    </appender>-->
+
+</configuration>

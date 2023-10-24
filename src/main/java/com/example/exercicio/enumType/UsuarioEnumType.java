@@ -33,7 +33,6 @@ public enum UsuarioEnumType implements RequireTypes {
         return description;
     }
 
-
     public static UsuarioEnumType fromId(String id) {
         for (UsuarioEnumType tipo : UsuarioEnumType.values()) {
             if (tipo.id.equals(id)) {
@@ -54,5 +53,10 @@ public enum UsuarioEnumType implements RequireTypes {
 //            return UsuarioEnumType.N; // Substitua pelo valor padrão desejado
 //        }
 //    }
+
+    @Override
+    public String toString() {
+        return description; // Retorna a descrição ao chamar toString()
+    }
 }
 

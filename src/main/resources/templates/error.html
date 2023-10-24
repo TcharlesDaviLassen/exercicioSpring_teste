@@ -6,43 +6,11 @@
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
-    </head>
-    <body>
-    <div th:if="${errorMsg}">
-        <script th:inline="javascript">
-            $(document).ready(function () {
-                // Exibe o modal quando há uma mensagem de erro
-                $('#errorModal').modal('show');
-            });
-        </script>
-    </div>
+</head>
 
-    <!-- Modal -->
-    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel"
-         aria-hidden="true" >
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="errorModalLabel">Erro</h5>
-                    <p style="margin-left: 1rem; margin-top: .35rem" th:text="${errorMsg}">Erro personalizado</p>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-<!--                    <div class="modal-body">-->
-<!--                        <p th:text="${errorMsgInfo}">Erro desconhecido.</p>-->
-<!--                    </div>-->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    </body>
-
+<body>
     <!--&lt;!&ndash;        <div class="alert alert-danger">&ndash;&gt;-->
     <!--&lt;!&ndash;            <p>Error occurred:</p>&ndash;&gt;-->
     <!--&lt;!&ndash;            <p th:text="${errorMsg}"></p>&ndash;&gt;-->
@@ -54,41 +22,98 @@
     <!--        <p id="errorMessage"></p>-->
     <!--    </div>-->
 
-    <!--    <script>-->
-    <!--            &lt;!&ndash;        // Adicione este script JavaScript&ndash;&gt;-->
-    <!--            &lt;!&ndash;        function showAlert(message) {&ndash;&gt;-->
-    <!--            &lt;!&ndash;            alert("Erro: " + message);&ndash;&gt;-->
-    <!--            &lt;!&ndash;        }&ndash;&gt;-->
 
-    <!--            &lt;!&ndash;        // Exemplo de chamada de API usando JavaScript (pode variar dependendo da sua configuração)&ndash;&gt;-->
-    <!--            &lt;!&ndash;        fetch("/some-api-endpoint")&ndash;&gt;-->
-    <!--            &lt;!&ndash;            .then(response => response.text())&ndash;&gt;-->
-    <!--            &lt;!&ndash;            .then(message => {&ndash;&gt;-->
-    <!--            &lt;!&ndash;                showAlert(message);&ndash;&gt;-->
-    <!--            &lt;!&ndash;            })&ndash;&gt;-->
-    <!--            &lt;!&ndash;            .catch(error => {&ndash;&gt;-->
-    <!--            &lt;!&ndash;                console.error(error);&ndash;&gt;-->
-    <!--            &lt;!&ndash;            });&ndash;&gt;-->
+    <div th:if="${errorMsg}">
+        <script th:inline="javascript">
+            $(document).ready(function () {
+                // Exibe o modal quando há uma mensagem de erro
+                $('#errorModal').modal('show');
+            });
+        </script>
+    </div>
 
 
+    <!--
+        data-backdrop="static" // adicionado ao modal para desativar o fechamento ao clicar fora do modal
+        data-keyboard="false" //  usado para desativar o fechamento do modal quando a tecla Esc é pressionada.
+    -->
 
-    <!--        function triggerCustomError() {-->
-    <!--            fetch("/some-api-endpoint")-->
-    <!--                .then(response => response.text())-->
-    <!--                .then(message => {-->
-    <!--                    showCustomAlert(message);-->
-    <!--                })-->
-    <!--                .catch(error => {-->
-    <!--                    console.error(error);-->
-    <!--                });-->
-    <!--        }-->
+    <!-- Modal -->
+    <div class="modal fade"
+         id="errorModal"
+         tabindex="-1"
+         role="dialog"
+         aria-labelledby="errorModalLabel"
+         aria-hidden="true"
+         data-backdrop="static"
+         data-keyboard="true"
+        >
+        <div class="modal-dialog"
+             role="document"
+            >
+            <div class="modal-content">
+                <div style="background-color:darkcyan;" class="modal-header">
 
-    <!--        function showCustomAlert(message) {-->
-    <!--            const customAlert = document.getElementById("customAlert");-->
-    <!--            const errorMessage = document.getElementById("errorMessage");-->
+                    <h5 class="modal-title" id="errorModalLabel">Erro</h5>
+                    <p style="margin-left: 1rem; margin-top: .35rem" th:text="${errorMsg}">Erro personalizado</p>
 
-    <!--            errorMessage.innerText = message;-->
-    <!--            customAlert.style.display = "block";-->
-    <!--        }-->
-    <!--    </script>-->
+                    <button type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                        >
+
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- <p th:text="${errorMsg}">Erro desconhecido.</p> -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+<!--    <script>-->
+<!--            &lt;!&ndash;        // Adicione este script JavaScript&ndash;&gt;-->
+<!--            &lt;!&ndash;        function showAlert(message) {&ndash;&gt;-->
+<!--            &lt;!&ndash;            alert("Erro: " + message);&ndash;&gt;-->
+<!--            &lt;!&ndash;        }&ndash;&gt;-->
+
+<!--            &lt;!&ndash;        // Exemplo de chamada de API usando JavaScript (pode variar dependendo da sua configuração)&ndash;&gt;-->
+<!--            &lt;!&ndash;        fetch("/some-api-endpoint")&ndash;&gt;-->
+<!--            &lt;!&ndash;            .then(response => response.text())&ndash;&gt;-->
+<!--            &lt;!&ndash;            .then(message => {&ndash;&gt;-->
+<!--            &lt;!&ndash;                showAlert(message);&ndash;&gt;-->
+<!--            &lt;!&ndash;            })&ndash;&gt;-->
+<!--            &lt;!&ndash;            .catch(error => {&ndash;&gt;-->
+<!--            &lt;!&ndash;                console.error(error);&ndash;&gt;-->
+<!--            &lt;!&ndash;            });&ndash;&gt;-->
+
+
+
+<!--        function triggerCustomError() {-->
+<!--            fetch("/some-api-endpoint")-->
+<!--                .then(response => response.text())-->
+<!--                .then(message => {-->
+<!--                    showCustomAlert(message);-->
+<!--                })-->
+<!--                .catch(error => {-->
+<!--                    console.error(error);-->
+<!--                });-->
+<!--        }-->
+
+<!--        function showCustomAlert(message) {-->
+<!--            const customAlert = document.getElementById("customAlert");-->
+<!--            const errorMessage = document.getElementById("errorMessage");-->
+
+<!--            errorMessage.innerText = message;-->
+<!--            customAlert.style.display = "block";-->
+<!--        }-->
+<!--    </script>-->
+
 </html>
