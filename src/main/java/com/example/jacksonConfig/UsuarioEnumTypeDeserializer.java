@@ -16,9 +16,9 @@ public class UsuarioEnumTypeDeserializer extends JsonDeserializer<UsuarioEnumTyp
 
         // Mapeie os valores do JSON para os valores do enum aqui
         if ("E".equalsIgnoreCase(tipoString)) {
-            return UsuarioEnumType.E;
+            return UsuarioEnumType.EMAIL;
         } else if ("N".equalsIgnoreCase(tipoString)) {
-            return UsuarioEnumType.N;
+            return UsuarioEnumType.NOME;
         }
 
         throw new IllegalArgumentException("Valor de tipo inválido: " + tipoString);

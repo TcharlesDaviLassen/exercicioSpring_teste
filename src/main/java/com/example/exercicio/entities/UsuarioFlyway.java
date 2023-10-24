@@ -28,8 +28,8 @@ public class UsuarioFlyway implements Serializable {
     private String email;
     private String data;
 
-    @Column(name = "usuario_enum_type_enum", columnDefinition = "char")
-    @Enumerated(value = EnumType.STRING)
+    @Column(name = "usuarioEnumTypeEnum")
+    @Enumerated(EnumType.STRING)
     private UsuarioEnumType usuarioEnumTypeEnum;
 
     public UsuarioFlyway() {
@@ -95,4 +95,10 @@ public class UsuarioFlyway implements Serializable {
     public void setUsuarioEnumTypeEnum(UsuarioEnumType usuarioEnumTypeEnum) {
         this.usuarioEnumTypeEnum = usuarioEnumTypeEnum;
     }
+
+    public String getUsuarioEnumAsString(UsuarioEnumType usuarioenum) {
+        return (usuarioenum != null) ? usuarioenum.toString() : "";
+    }
+
 }
+

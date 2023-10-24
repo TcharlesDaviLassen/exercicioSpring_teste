@@ -3,6 +3,7 @@ package com.example.exercicio.controller;
 import com.example.exercicio.DTO.User;
 import com.example.exercicio.DTO.UsuarioDTO;
 import com.example.exercicio.entities.*;
+import com.example.exercicio.enumType.ReportEntity;
 import com.example.exercicio.enumType.UsuarioEnumType;
 import com.example.exercicio.errorsUtils.BusinessException.BusinessException;
 import com.example.exercicio.errorsUtils.customRuntimeExempion.CustomException;
@@ -110,6 +111,8 @@ public class UsuarioController {
 
     @PostMapping("/edit/{id}")
     public String edit(@PathVariable(name = "id") Long id, @Valid UsuarioFlyway usuarioFlyway) {
+
+        usuarioFlywayService.edit(usuarioFlyway);
         return "redirect:/usuario/usuarioPage";
     }
 
@@ -327,39 +330,110 @@ public class UsuarioController {
             //            viewer.setVisible(true);
 
 
+            var findByAllUsers = usuarioFlywayService.findByAll();
+            // Criar a fonte de dados JRBeanCollectionDataSource
+//            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(findByAllUsers);
 
-            //            var findByAllUsers = usuarioFlywayService.findByAll();
-            //            JRBeanCollectionDataSource beanDataSource = new JRBeanCollectionDataSource(findByAllUsers);
+            UsuarioFlyway userFly = new UsuarioFlyway();
+            //    for (UsuarioFlyway findByAllUser : findByAllUsers) {
+            //        userFly.setUsuarioEnumTypeEnum(findByAllUser.getUsuarioEnumTypeEnum());
+            //        userFly.getUsuarioEnumAsString(userFly.getUsuarioEnumTypeEnum());
             //
-            //            String reportTemplatePath = "/home/flexabus/devel/workspaces/flexabus-external-resources/reports/TESTE/jasperPDF_teste.jasper";
-            //
-            //            // Preencher os parâmetros do relatório, se houver
-            //            Map<String, Object> parameters = new HashMap<>();
-            //            parameters.put("tituloRelatorio", "Relatório de Produtos");
-            //            parameters.put("subTituloRelatorio", "Relatório de Produtos do trabalho spring teste");
-            //
-            //            // Criar a fonte de dados JRBeanCollectionDataSource
-            //            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(findByAllUsers);
-            //
-            //            // Preencher o relatório com os dados
-            //            JasperPrint jasperPrint = JasperFillManager.fillReport(reportTemplatePath, parameters, dataSource);
-            //
-            //            // Visualizar o relatório
-            //            JasperViewer viewer = new JasperViewer(jasperPrint, false);
-            //            viewer.setVisible(true);
+            //    }
+
+            String reportTemplatePath = "/home/flexabus/devel/workspaces/flexabus-external-resources/reports/TESTE/jasperPDF_teste.jrxml";
+            JasperReport jasperReport = JasperCompileManager.compileReport(reportTemplatePath);
+
+            String contextImage = "/home/flexabus/Imagens/Capturas de tela/Captura de tela de 2023-10-09 08-44-11.png";
+
+            // Create a list of Enum values
+            //   List<UsuarioEnumType> enumList = Arrays.asList(UsuarioEnumType.values());
+            // Create a list of Strings from the enum values
+            //    List<String> dados = Arrays.asList("N", "E");
+            // List<UsuarioEnumType> enumNames = new ArrayList<>();
+
+            //  String enumNames = " ";
+            //            for (UsuarioEnumType item : UsuarioEnumType.values()) {
+            //                    enumNames.add(item.name());
+            //            }
+
+            //  for (UsuarioEnumType dado : UsuarioEnumType.values()) {
+            //        if ("N".equals(dado)) {
+            //            enumNames.add(UsuarioEnumType.N);
+            //        } else if ("E".equals(dado)) {
+            //            enumNames.add(UsuarioEnumType.E);
+            //        }
+            //    }
+            //  }
+
+            //  Preencher os parâmetros do relatório, se houver
+            Map<String, Object> parameters = new HashMap<>();
+            UsuarioFlyway usuarioFlyway = new UsuarioFlyway();
+
+            //            for (int i = 0; i < findByAllUsers.size(); i++) {
+            //                parameters.put("usuario_enum_type_enum", findByAllUsers.get(i).getUsuarioEnumTypeEnum().name());
+            //            };
+
+            List<Map<String, Object>> lisMapParamiters = new ArrayList<>();
+            parameters.put("tituloRelatorio", "Relatório de Produtos");
+            parameters.put("subTituloRelatorio", "Relatório de Produtos do trabalho spring teste");
+            parameters.put("contextImage", contextImage);
+
+            for (UsuarioFlyway usuario : findByAllUsers) {
+                Map<String, Object> parametersMap = new HashMap<>();
+
+                parametersMap.put("nome", usuario.getNome());
+                parametersMap.put("numero", usuario.getNumero());
+                parametersMap.put("email", usuario.getEmail());
+                parametersMap.put("data", usuario.getData());
+                if(usuario.getUsuarioEnumTypeEnum() != null) {
+                    parametersMap.put("usuarioEnumTypeEnum", usuario.getUsuarioEnumTypeEnum().name());
+                }
+
+                lisMapParamiters.add(parametersMap);
+            }
+
+            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(lisMapParamiters);
+
+            // Adicione a lista de enum ao parâmetro
+            // parameters.put(, usuarioFlyway.getUsuarioEnumTypeEnum().name());
+
+            // Preencher o relatório com os dados
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+
+            // Configurar a rparameters =  size = 12esposta HTTP para um PDF
+            // Isso configura o cabeçalho da resposta HTTP para definir o nome do arquivo e como o navegador deve manipulá-lo.
+            // Neste caso, "inline" indica que o navegador deve exibir o PDF no navegador,
+            // e "filename=relatorio.pdf" define o nome do arquivo.
+            response.setContentType("application/pdf");
+            response.setHeader("Content-Disposition", "inline; filename=relatorio.pdf");
+
+            OutputStream outStream = response.getOutputStream();
+            JRPdfExporter exporter = new JRPdfExporter();
+            // Aqui, definimos o relatório a ser exportado como entrada para o exportador.
+            exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+            // Configuramos o fluxo de saída para o exportador, que enviará o PDF para o outStream
+            exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(outStream));
+            // Isso efetivamente exporta o relatório para o fluxo de saída, criando o PDF.
+            exporter.exportReport();
+
+            String filePath = "/home/flexabus/Downloads/ExercicoSpring_teste/PDF_Docs/" + UUID.randomUUID().toString() + "_usuarios.pdf";
+            JasperExportManager.exportReportToPdfFile(jasperPrint, filePath );
+
+            // Visualizar o relatório
+            //    JasperViewer viewer = new JasperViewer(jasperPrint, false);
+            //    viewer.setVisible(true);
 
         } catch (CustomException e) {
             System.out.println("ERRO NO JASPERSOFT NA CLASSE DE UsuarioController: " + e.getStatus() + " " + e.getMessage());
         } catch (JRException e) {
             throw new RuntimeException("Erro no JasperReports: " + e.getMessage(), e);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 //        catch (IOException e) {
 //            throw new RuntimeException("Erro de E/S: " + e.getMessage(), e);
 //        }
-
 
     }
 }

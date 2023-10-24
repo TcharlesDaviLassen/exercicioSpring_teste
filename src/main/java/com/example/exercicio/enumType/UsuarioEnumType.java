@@ -6,45 +6,33 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-@JsonDeserialize(using = UsuarioEnumTypeDeserializer.class)
+//@JsonDeserialize(using = UsuarioEnumTypeDeserializer.class)
+
 public enum UsuarioEnumType implements RequireTypes {
 
-//    NOME("N", "NOME"),
-//    EMAIL("E", "EMAIL");
+    NOME("N", "NOME"),
+    EMAIL("E", "EMAIL");
 
-    N("N", "NOME"),
-    E("E", "EMAIL");
-
-    private String id;
-    private String description;
-
-    UsuarioEnumType() {
-    }
+    private final String id;
+    private final String description;
 
     UsuarioEnumType(String id, String description) {
         this.id = id;
         this.description = description;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    @Override
     public String getId() {
         return id;
     }
 
-    @Override
     public String getDescription() {
         return description;
     }
+
 
     public static UsuarioEnumType fromId(String id) {
         for (UsuarioEnumType tipo : UsuarioEnumType.values()) {

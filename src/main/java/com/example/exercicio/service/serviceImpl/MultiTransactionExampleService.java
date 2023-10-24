@@ -17,14 +17,14 @@ public class MultiTransactionExampleService {
     @Transactional
     public void performSuccessfulTransaction() {
         //  User user1 = new User("User1", "user@teste.com", "999999999", "teste", false);
-        UsuarioFlyway user1 = new UsuarioFlyway(1L,"User1", "999999999", "user@teste.com", "", UsuarioEnumType.E);
+        UsuarioFlyway user1 = new UsuarioFlyway(1L,"User1", "999999999", "user@teste.com", "", UsuarioEnumType.EMAIL);
         userRepository.save(user1);
     }
 
     @Transactional
     public void performFailedTransaction() {
         //        try {
-            UsuarioFlyway user2 = new UsuarioFlyway(1L,"User2", "999999999", "userss@teste.com", "", UsuarioEnumType.E);
+            UsuarioFlyway user2 = new UsuarioFlyway(1L,"User2", "999999999", "userss@teste.com", "", UsuarioEnumType.EMAIL);
             userRepository.save(user2);
         //        } catch (Exception e) {
         //             System.out.println(e.getMessage());
