@@ -28,13 +28,12 @@ public class UsuarioFlyway implements Serializable {
     private String email;
     private String data;
 
-    @Column(name = "usuarioEnumTypeEnum")
+    @Column(name = "usuarioEnumTypeEnum", columnDefinition = "string")
     @Enumerated(EnumType.STRING)
     private UsuarioEnumType usuarioEnumTypeEnum;
 
     public UsuarioFlyway() {
     }
-
 
     public UsuarioFlyway(Long id, String nome, String numero, String email, String data, UsuarioEnumType usuarioEnumTypeEnum) {
         this.id = id;

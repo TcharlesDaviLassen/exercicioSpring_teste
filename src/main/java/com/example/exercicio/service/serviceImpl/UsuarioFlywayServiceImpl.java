@@ -14,10 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.TimeZone;
+import java.util.*;
 
 @Service
 public class UsuarioFlywayServiceImpl implements UsuarioFlywayService {
@@ -112,11 +109,24 @@ public class UsuarioFlywayServiceImpl implements UsuarioFlywayService {
 
         var findUser = usuarioRepository.findById(usuarioFlyway.getId());
 
+        Date dateGMT = new Date();
+
+        // Defina o fuso horário desejado (por exemplo, "America/New_York")
+        TimeZone timeZone = TimeZone.getTimeZone("America/New_York");
+
+        // Crie um SimpleDateFormat com o fuso horário desejado
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        dateFormat.setTimeZone(timeZone);
+
+        // Converta a data para a representação do fuso horário desejado
+        String dataFormatada = dateFormat.format(dateGMT);
+
         if (findUser.isPresent()) {
             findUser.get().setNome(usuarioFlyway.getNome());
             findUser.get().setNumero(usuarioFlyway.getNumero());
             findUser.get().setEmail(usuarioFlyway.getEmail());
-            findUser.get().setData(usuarioFlyway.getData());
+            //            findUser.get().setData(usuarioFlyway.getData().toString().replace("T", " "));
+            //            findUser.get().setData(dataFormatada);
             findUser.get().setUsuarioEnumTypeEnum(usuarioFlyway.getUsuarioEnumTypeEnum());
 
             return usuarioRepository.save(findUser.get());
