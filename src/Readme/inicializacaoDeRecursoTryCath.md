@@ -2,9 +2,11 @@
 
 try: O bloco try é usado para envolver o código que pode gerar exceções. No seu caso, ele está envolvendo a criação de um FileOutputStream e a escrita de dados nesse fluxo. Se alguma exceção do tipo IOException ocorrer dentro deste bloco, o controle será transferido para o bloco catch.
 
-(FileOutputStream outputStream = new FileOutputStream(destinationPath)): Esta é uma declaração de recursos (resource declaration) introduzida no Java 7. Ela permite que você crie um recurso (neste caso, um FileOutputStream) e o associe a uma variável (neste caso, outputStream). Esse recurso será automaticamente fechado quando o bloco try for concluído, garantindo que os recursos sejam liberados de forma apropriada. Isso é útil para evitar vazamentos de recursos.
+`(FileOutputStream outputStream = new FileOutputStream(destinationPath))`: Esta é uma declaração de recursos (resource declaration) introduzida no Java 7. 
+Ela permite que você crie um recurso (neste caso, um `FileOutputStream`) e o associe a uma variável (neste caso, outputStream). 
+Esse recurso será automaticamente fechado quando o bloco try for concluído, garantindo que os recursos sejam liberados de forma apropriada. Isso é útil para evitar vazamentos de recursos.
 
-outputStream.write(imagem.getDados()): Dentro do bloco try, o código escreve os dados da imagem no FileOutputStream. Se ocorrer uma exceção, ela será capturada pelo bloco catch.
+`outputStream.write(imagem.getDados())`: Dentro do bloco try, o código escreve os dados da imagem no `FileOutputStream`. Se ocorrer uma exceção, ela será capturada pelo bloco catch.
 
 catch (IOException e): Este é o bloco catch, que captura exceções do tipo IOException. Se uma exceção desse tipo ocorrer dentro do bloco try, o código dentro deste bloco catch será executado.
 

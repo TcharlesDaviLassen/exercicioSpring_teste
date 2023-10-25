@@ -1,0 +1,67 @@
+<!--suppress ALL -->
+<!DOCTYPE html>
+<html>
+    <head th:replace="~{leiauteBase :: head}"></head>
+    <title>Upload de Imagens</title>
+
+    <style>
+        #drop-area {
+            display:flex;
+            width: 300px;
+            height: 200px;
+            border: 2px dashed #ccc;
+            text-align: center;
+            line-height: 200px;
+            font-size: 20px;
+            font-weight: bold;
+            margin-left: 6rem;
+        }
+
+        #image-preview {
+           margin-top: 20px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        li {
+            background-color: #f2f2f2;
+            padding: 10px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        li:hover {
+            background-color: #ddd;
+        }
+    </style>
+
+    <body>
+        <h1>Upload de Imagens</h1>
+
+        <!--        <div>-->
+        <!--            <form action="/imagens/uploads" method="post" enctype="multipart/form-data">-->
+        <!--                <input type="file" name="file" multiple="multiple" accept="image/*" />-->
+        <!--                <br/>-->
+        <!--                <input type="submit" value="Enviar Imagens" />-->
+        <!--            </form>-->
+
+        <!--            <p th:text="${message}"></p>-->
+        <!--        </div>-->
+
+        <div id="drop-area"></div>
+        <div id="image-preview"></div>
+
+        <!--        <h2>Arraste e solte para reordenar</h2>-->
+        <!--        <ul id="sortable-list">-->
+        <!--            <li draggable="true">Item 1</li>-->
+        <!--            <li draggable="true">Item 2</li>-->
+        <!--            <li draggable="true">Item 3</li>-->
+        <!--            <li draggable="true">Item 4</li>-->
+        <!--            <li draggable="true">Item 5</li>-->
+        <!--        </ul>-->
+
+        <script src="/static/js/imageDragDrop.js" th:src="@{/js/imageDragDrop.js}"></script>
+    </body>
+</html>

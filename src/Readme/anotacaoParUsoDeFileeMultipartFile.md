@@ -123,35 +123,35 @@ Aqui está um exemplo de como você pode implementar a verificação de tamanho 
 // Exemplo de verificação de tamanho máximo
 int maxSizeBytes = 5 * 1024 * 1024; // 5 MB
 
-try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-HttpGet httpGet = new HttpGet(imageUrl);
-try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
-if (response.getStatusLine().getStatusCode() == 200) {
-try (InputStream inputStream = response.getEntity().getContent()) {
-byte[] buffer = new byte[1024];
-int bytesRead;
-int totalBytesRead = 0;
-
-                while ((bytesRead = inputStream.read(buffer)) != -1) {
-                    totalBytesRead += bytesRead;
-
-                    // Verifique o tamanho e cancele o download se exceder o limite
-                    if (totalBytesRead > maxSizeBytes) {
-                        return "Tamanho da imagem excede o limite permitido.";
+    try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+        HttpGet httpGet = new HttpGet(imageUrl);
+        try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
+            if (response.getStatusLine().getStatusCode() == 200) {
+                try (InputStream inputStream = response.getEntity().getContent()) {
+                    byte[] buffer = new byte[1024];
+                    int bytesRead;
+                    int totalBytesRead = 0;
+    
+                    while ((bytesRead = inputStream.read(buffer)) != -1) {
+                        totalBytesRead += bytesRead;
+    
+                        // Verifique o tamanho e cancele o download se exceder o limite
+                        if (totalBytesRead > maxSizeBytes) {
+                            return "Tamanho da imagem excede o limite permitido.";
+                        }
+    
+                        // Salve os dados no arquivo
+                        outputStream.write(buffer, 0, bytesRead);
                     }
-
-                    // Salve os dados no arquivo
-                    outputStream.write(buffer, 0, bytesRead);
                 }
+            } else {
+                return "Falha ao baixar a imagem. Código de resposta HTTP: " + response.getStatusLine().getStatusCode();
             }
-        } else {
-            return "Falha ao baixar a imagem. Código de resposta HTTP: " + response.getStatusLine().getStatusCode();
         }
+    } catch (IOException e) {
+        e.printStackTrace();
+        return "Erro durante o download das imagens: " + e.getMessage();
     }
-} catch (IOException e) {
-e.printStackTrace();
-return "Erro durante o download das imagens: " + e.getMessage();
-}
 ```
 
 Este exemplo verifica o tamanho enquanto lê os dados da imagem da URL. Se o tamanho exceder o limite (maxSizeBytes), o download é cancelado.
@@ -170,35 +170,35 @@ Aqui está como você pode definir um limite de tamanho em um terabyte em seu c�
 // Definir um limite de tamanho em um terabyte (1 TB)
 long maxFileSizeBytes = 1_099_511_627_776L; // 1 terabyte em bytes
 
-try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-HttpGet httpGet = new HttpGet(imageUrl);
-try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
-if (response.getStatusLine().getStatusCode() == 200) {
-try (InputStream inputStream = response.getEntity().getContent()) {
-byte[] buffer = new byte[1024];
-int bytesRead;
-long totalBytesRead = 0;
+    try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+        HttpGet httpGet = new HttpGet(imageUrl);
+        try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
+            if (response.getStatusLine().getStatusCode() == 200) {
+                try (InputStream inputStream = response.getEntity().getContent()) {
+                    byte[] buffer = new byte[1024];
+                    int bytesRead;
+                    long totalBytesRead = 0;
 
-                while ((bytesRead = inputStream.read(buffer)) != -1) {
-                    totalBytesRead += bytesRead;
-
-                    // Verificar o tamanho e cancelar o download se exceder o limite (1 TB)
-                    if (totalBytesRead > maxFileSizeBytes) {
-                        return "Tamanho da imagem excede o limite permitido (1 TB).";
+                    while ((bytesRead = inputStream.read(buffer)) != -1) {
+                        totalBytesRead += bytesRead;
+    
+                        // Verificar o tamanho e cancelar o download se exceder o limite (1 TB)
+                        if (totalBytesRead > maxFileSizeBytes) {
+                            return "Tamanho da imagem excede o limite permitido (1 TB).";
+                        }
+    
+                        // Salvar os dados no arquivo
+                        outputStream.write(buffer, 0, bytesRead);
                     }
-
-                    // Salvar os dados no arquivo
-                    outputStream.write(buffer, 0, bytesRead);
                 }
+            } else {
+                return "Falha ao baixar a imagem. Código de resposta HTTP: " + response.getStatusLine().getStatusCode();
             }
-        } else {
-            return "Falha ao baixar a imagem. Código de resposta HTTP: " + response.getStatusLine().getStatusCode();
         }
+    } catch (IOException e) {
+        e.printStackTrace();
+        return "Erro durante o download das imagens: " + e.getMessage();
     }
-} catch (IOException e) {
-e.printStackTrace();
-return "Erro durante o download das imagens: " + e.getMessage();
-}
 ```
 
 Neste exemplo, o limite de tamanho é definido como 1_099_511_627_776L, que representa um terabyte em bytes. Qualquer imagem cujo tamanho exceda esse limite será rejeitada durante o processo de download.
@@ -288,3 +288,37 @@ public class ExemploFileOutputStream {
 ```
 
 Neste exemplo, criamos um arquivo chamado "exemplo.txt" e escrevemos o conteúdo do String no arquivo. Lembre-se de que é importante tratar exceções ao trabalhar com E/S de arquivo, como é feito no bloco try-catch.
+
+#
+#
+
+### CloseableHttpClient:
+
+A classe `CloseableHttpClient` faz parte do framework Apache `HttpClient`, que é uma biblioteca Java amplamente usada para fazer solicitações HTTP. Essa classe é uma implementação da interface `Closeable` e é projetada para lidar com operações de cliente HTTP, como enviar solicitações HTTP e receber respostas.
+
+### Closeable: 
+Closeable é uma interface no Java que representa objetos que podem ser fechados, geralmente usados para liberar recursos. No caso do CloseableHttpClient, ele pode ser fechado para liberar recursos associados, como conexões de rede, após o uso.
+
+### CloseableHttpResponse:
+
+A classe `CloseableHttpResponse` também faz parte do framework Apache `HttpClient`. Ela representa uma resposta HTTP recebida após uma solicitação HTTP ter sido enviada por um cliente HTTP. Essa classe estende HttpResponse e também implementa a interface Closeable.
+
+`HttpResponse`: HttpResponse é uma interface que contém métodos para acessar informações da resposta HTTP, como o status da resposta, cabeçalhos e o corpo da resposta.
+
+### InputStream:
+
+`InputStream` é uma classe abstrata no Java que fornece uma interface para ler dados binários (bytes) de uma fonte, como um arquivo, uma conexão de rede ou qualquer outra entrada de dados. Você pode usar subclasses de `InputStream`, como `FileInputStream` para ler dados de arquivos, ou `BufferedInputStream` para melhorar o desempenho da leitura.
+
+`InputStream` é frequentemente usado para ler dados de origens diversas, como arquivos, sockets, entradas de usuário, etc.
+
+### FileOutputStream:
+
+A classe `FileOutputStream` é usada para gravar dados `binários` em um arquivo. Ela faz parte do pacote java.io e estende a classe `OutputStream`. Essa classe é usada para criar, abrir ou escrever em arquivos no sistema de arquivos.
+
+### OutputStream: 
+
+`OutputStream` é uma classe abstrata que fornece uma interface para escrever dados binários (bytes) para uma saída, como um arquivo, um soquete ou qualquer outra fonte de dados. 
+
+`FileOutputStream` é uma implementação específica de `OutputStream` que lida com a escrita de dados em arquivos.
+
+Em resumo, todas essas classes estão relacionadas à manipulação de dados binários, seja para enviar e receber dados por meio de solicitações HTTP (CloseableHttpClient e CloseableHttpResponse), ler dados de várias fontes (InputStream), ou escrever dados em arquivos no sistema de arquivos (FileOutputStream). Cada classe tem seu propósito e é amplamente usada em diferentes cenários de programação em Java.

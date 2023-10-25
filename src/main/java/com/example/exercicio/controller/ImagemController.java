@@ -8,6 +8,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,45 +17,72 @@ import javax.imageio.ImageIO;
 import java.io.*;
 import java.util.*;
 
-@RestController
+//@RestController
+//@RequestMapping("/imagens")
+//public class ImagemController {
+//    @Autowired
+//    private ImagemRepository imagemRepository;
+//
+//    @PostMapping("/uploads")
+//    public String uploadImagem(@RequestParam("file") List<MultipartFile> files) throws IOException {
+//
+//        for (MultipartFile file : files) {
+//            try {
+//                Images imagem = new Images();
+//                imagem.setNome(file.getOriginalFilename());
+//                imagem.setDados(file.getBytes());
+//                imagemRepository.save(imagem);
+//
+//                // Agora você pode copiar a imagem para o servidor
+//                // Você pode usar o código de cópia anterior para copiar a imagem para um diretório específico
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//                return "Erro ao fazer upload das imagens: " + e.getMessage();
+//            }
+//        }
+//
+//        return "Imagens salvas com sucesso.";
+//    }
+
+@Controller
 @RequestMapping("/imagens")
 public class ImagemController {
+
     @Autowired
     private ImagemRepository imagemRepository;
 
-    @PostMapping("/uploads")
-    public String uploadImagem(@RequestParam("file") List<MultipartFile> files) throws IOException {
+    @GetMapping("/page")
+    public String renderPageImage(Model model) {
+        return "imageUpload";
+    }
 
+    @RequestMapping(value = "/uploads", method = RequestMethod.POST)
+    public String uploadImagem(@RequestParam("file") List<MultipartFile> files, Model model) {
         for (MultipartFile file : files) {
             try {
+                String  filename = file.getOriginalFilename();
+                if(filename.isEmpty()) {
+                    throw new IOException("Nome do arquivo em branco.");
+                }
+
                 Images imagem = new Images();
                 imagem.setNome(file.getOriginalFilename());
                 imagem.setDados(file.getBytes());
                 imagemRepository.save(imagem);
 
-                // Agora você pode copiar a imagem para o servidor
-                // Você pode usar o código de cópia anterior para copiar a imagem para um diretório específico
-            } catch (IOException e) {
+                model.addAttribute("message", "Imagens salvas com sucesso.");
+
+            } catch (IOException  e) {
                 e.printStackTrace();
-                return "Erro ao fazer upload das imagens: " + e.getMessage();
+                model.addAttribute("message", "Erro ao fazer upload das imagens: " + e.getMessage() + " causa: " + e.getCause());
+                return "imageUpload";
             }
         }
 
-        return "Imagens salvas com sucesso.";
-
-        //        Images imagem = new Images();
-        //        imagem.setNome(file.getName());
-        //        imagem.setDados(file.getBytes());
-        //        imagemRepository.save(imagem);
-        //
-        //        // Aqui você pode copiar a imagem para o servidor
-        //        // Por simplicidade, estou apenas retornando a ID da imagem
-        //
-        //
-        //        return "Imagem salva com sucesso. ID: " + imagem.getId();
+        return "imageUpload";
     }
 
-    //    @GetMapping("/download/{id}")
+
     @PostMapping("/downloadImagem")
     public String downloadImagem(@RequestBody ImagesDownloadRequestDTO imagesDownloadRequestDTO) {
         Long id = imagesDownloadRequestDTO.getId();
