@@ -7,11 +7,44 @@
     <body>
         <div class="container mt-4">
 
-            <a th:href="@{/usuario/create}" th:method="get">
-                <button type="submit" class="btn btn-primary">Criar
-                    <i class="fa fa-user" style="color: white"></i>
-                </button>
-            </a>
+            <div style="display: flex; flex-direction: row; margin-bottom: 1rem;">
+                <a th:href="@{/usuario/create}" th:method="get">
+                    <button type="submit" class="btn btn-primary">Criar
+                        <i class="fa fa-user" style="color: white"></i>
+                    </button>
+                </a>
+
+                <a th:href="@{/usuario/jasperPDF}" style="margin-left: 1rem" th:method="get">
+                    <button type="submit" class="btn btn-danger">PDF
+                        <i class="fa-solid fa-file-pdf" style="color: white"></i>
+                    </button>
+                </a>
+
+                <a th:href="@{/usuario/jasperEXCEL}" style="margin-left: 1rem" th:method="get">
+                    <button type="submit" class="btn btn-success">EXCEL
+                        <i class="fa fa-file-excel" style="color: white"></i>
+                    </button>
+                </a>
+
+                <a th:href="@{/usuario/jasperCSV}" style="margin-left: 1rem" th:method="get">
+                    <button type="submit" class="btn btn-teal">CSV
+                        <i class="fa fa-solid fa-file-csv" style="color: white"></i>
+
+                    </button>
+                </a>
+
+                <a th:href="@{/usuario/jasperHTML}" style="margin-left: 1rem" th:method="get">
+                    <button type="submit" class="btn btn-ht">HTML
+                        <i class="fa-brands fa-html5"></i>
+                    </button>
+                </a>
+
+                <a th:href="@{/usuario/jasperXML}" style="margin-left: 1rem" th:method="get">
+                    <button type="submit" class="btn btn-xm">XML
+                        <i class="fa fa-file-xml-o" style="color: white"></i>
+                    </button>
+                </a>
+            </div>
 
             <table id="tabela" class="table table-striped table-bordered custom-table">
                 <thead id="theadId" class="thead-dark custom-thead">
@@ -31,7 +64,7 @@
                         <th class="thInput"><input type="text" class="filtroInput" id="filtroEmail" placeholder="Filtrar por email"></th>
                         <th class="thInput"><input type="text" class="filtroInput" id="filtroData" placeholder="Filtrar por data"></th>
                         <th class="thInput" th:object="${usuarioCreate}">
-                            <select class="filtroInput" id="filtroTipo" th:field="*{usuarioEnum}">
+                            <select class="filtroInput" id="filtroTipo" th:field="*{usuarioEnumTypeEnum}">
                                 <option value=""></option>
                                 <option th:each="state : ${T(com.example.exercicio.enumType.UsuarioEnumType).values()}"
                                         th:value="${state.name()}"
@@ -47,7 +80,7 @@
                         <td th:text="${func.numero}"></td>
                         <td th:text="${func.email}"></td>
                         <td th:text="${func.data}"></td>
-                        <td class="tipo" th:text="${func.usuarioEnum}"></td>
+                        <td class="tipo" th:text="${func.usuarioEnumTypeEnum}"></td>
                         <td class="buttons">
                             <a id="idUserEdit" th:data-idUserEditData="@{(${func.id})}" th:href="@{/usuario/edit/{id}(id=${func.id})}"
                                method="get"
