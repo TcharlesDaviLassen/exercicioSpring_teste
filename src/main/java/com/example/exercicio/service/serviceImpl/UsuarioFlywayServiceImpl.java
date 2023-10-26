@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -44,15 +45,15 @@ public class UsuarioFlywayServiceImpl implements UsuarioFlywayService {
 
         usuarioFlyway.setData(dataFormatada);
 
-        List<UsuarioFlyway> findNomeEmail = usuarioRepository.findAll();
-
-        for (int i = 0; i < findNomeEmail.size() ; i++) {
-            if (usuarioFlyway.getNome().equals(findNomeEmail.get(i).getNome()) || usuarioFlyway.getEmail().equals(findNomeEmail.get(i).getEmail())) {
-                throw new IllegalArgumentException("Nome e email não podem ser iguais ao que já estão cadastrados");
-            }
-        }
+        //        List<UsuarioFlyway> findNomeEmail = usuarioRepository.findAll();
+        //        for (int i = 0; i < findNomeEmail.size() ; i++) {
+        //            if (usuarioFlyway.getNome().equals(findNomeEmail.get(i).getNome()) || usuarioFlyway.getEmail().equals(findNomeEmail.get(i).getEmail())) {
+        //                throw new IllegalArgumentException("Nome e email não podem ser iguais ao que já estão cadastrados");
+        //            }
+        //        }
 
         return usuarioRepository.save(usuarioFlyway);
+
     }
 
 
@@ -95,7 +96,6 @@ public class UsuarioFlywayServiceImpl implements UsuarioFlywayService {
             }
         }
 
-        usuarioFlyway.setData(dataFormatada);
         return usuarioRepository.save(usuarioFlyway);
     }
 
