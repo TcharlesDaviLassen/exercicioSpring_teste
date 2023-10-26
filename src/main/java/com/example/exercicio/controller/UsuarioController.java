@@ -16,9 +16,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.export.JRPdfExporter;
-import net.sf.jasperreports.export.SimpleExporterInput;
-import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
+import net.sf.jasperreports.engine.export.*;
+import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
+import net.sf.jasperreports.export.*;
 import net.sf.jasperreports.view.JasperViewer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,6 +29,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.awt.*;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -264,7 +265,7 @@ public class UsuarioController {
             // Isso efetivamente exporta o relatório para o fluxo de saída, criando o PDF.
             exporter.exportReport();
 
-            String filePath = "/home/flexabus/Downloads/ExercicoSpring_teste/PDF_Docs/" + UUID.randomUUID().toString() + "_usuarios.pdf";
+            String filePath = "/home/flexabus/Downloads/ExercicoSpring_teste/PDF_Docs/pdfDocs/" + UUID.randomUUID().toString() + "_usuarios.pdf";
             JasperExportManager.exportReportToPdfFile(jasperPrint, filePath );
 
             outStream.flush(); // Isso limpa qualquer buffer de saída pendente.
@@ -281,7 +282,257 @@ public class UsuarioController {
 //        catch (IOException e) {
 //            throw new RuntimeException("Erro de E/S: " + e.getMessage(), e);
 //        }
+    }
 
+    @RequestMapping(value = "/jasperEXCEL", method = RequestMethod.GET)
+    public void jasperEXCEL(HttpServletResponse response){
+        try {
 
+            var findByAllUsers = usuarioFlywayService.findByAll();
+
+            String reportTemplatePath = "/home/flexabus/devel/workspaces/flexabus-external-resources/reports/TESTE/jasperPDF_teste.jrxml";
+            JasperReport jasperReport = JasperCompileManager.compileReport(reportTemplatePath); // Compila o relátorio .jrxml para um binário .jasper
+
+            String contextImage = "/home/flexabus/Imagens/Capturas de tela/Captura de tela de 2023-10-09 08-44-11.png";
+
+            //  Preencher os parâmetros do relatório, se houver
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("tituloRelatorio", "Relatório de Produtos");
+            parameters.put("subTituloRelatorio", "Relatório de Produtos do trabalho spring teste");
+            parameters.put("contextImage", "/home/flexabus/Imagens/Capturas de tela/Captura de tela de 2023-10-09 08-44-11.png");
+
+            List<Map<String, Object>> lisMapParamiters = new ArrayList<>();
+            for (UsuarioFlyway usuario : findByAllUsers) {
+                Map<String, Object> parametersMap = new HashMap<>();
+
+                parametersMap.put("nome", usuario.getNome());
+                parametersMap.put("numero", usuario.getNumero());
+                parametersMap.put("email", usuario.getEmail());
+                parametersMap.put("data", usuario.getData());
+                parametersMap.put("usuarioenumtypeenum", usuario.getUsuarioEnumTypeEnum().name());
+
+                lisMapParamiters.add(parametersMap);
+            }
+
+            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(lisMapParamiters);
+
+            // Preencher o relatório com os dados
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+
+            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            response.setHeader("Content-Disposition", "inline; filename=relatorio.xlsx");
+
+            OutputStream outStream = response.getOutputStream();
+            JRXlsxExporter exporter = new JRXlsxExporter();
+            exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+            exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(outStream));
+            exporter.exportReport();
+
+            String filePath = "/home/flexabus/Downloads/ExercicoSpring_teste/PDF_Docs/excelDocs/" + UUID.randomUUID().toString() + "_usuarios.xlsx";
+            JasperExportManager.exportReportToPdfFile(jasperPrint, filePath);
+
+            outStream.flush(); // Isso limpa qualquer buffer de saída pendente.
+            outStream.close(); //  Isso fecha o fluxo de saída.
+
+        } catch (CustomException e) {
+            System.out.println("ERRO NO JASPERSOFT NA CLASSE DE UsuarioController: " + e.getStatus() + " " + e.getMessage());
+        } catch (JRException e) {
+            throw new RuntimeException("Erro no JasperReports: " + e.getMessage(), e);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @RequestMapping(value = "/jasperCSV", method = RequestMethod.GET)
+    public void jasperCSV(HttpServletResponse response){
+        try {
+
+            var findByAllUsers = usuarioFlywayService.findByAll();
+
+            String reportTemplatePath = "/home/flexabus/devel/workspaces/flexabus-external-resources/reports/TESTE/jasperPDF_teste.jrxml";
+            JasperReport jasperReport = JasperCompileManager.compileReport(reportTemplatePath); // Compila o relátorio .jrxml para um binário .jasper
+
+            String contextImage = "/home/flexabus/Imagens/Capturas de tela/Captura de tela de 2023-10-09 08-44-11.png";
+
+            //  Preencher os parâmetros do relatório, se houver
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("tituloRelatorio", "Relatório de Produtos");
+            parameters.put("subTituloRelatorio", "Relatório de Produtos do trabalho spring teste");
+            parameters.put("contextImage", contextImage);
+
+            List<Map<String, Object>> lisMapParamiters = new ArrayList<>();
+            for (UsuarioFlyway usuario : findByAllUsers) {
+                Map<String, Object> parametersMap = new HashMap<>();
+
+                parametersMap.put("nome", usuario.getNome());
+                parametersMap.put("numero", usuario.getNumero());
+                parametersMap.put("email", usuario.getEmail());
+                parametersMap.put("data", usuario.getData());
+                parametersMap.put("usuarioenumtypeenum", usuario.getUsuarioEnumTypeEnum().name());
+
+                lisMapParamiters.add(parametersMap);
+            }
+
+            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(lisMapParamiters);
+
+            // Preencher o relatório com os dados
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+
+            response.setContentType("text/csv");
+            response.setHeader("Content-Disposition", "inline; filename=relatorio.csv");
+
+            OutputStream outStream = response.getOutputStream();
+            JRCsvExporter exporter = new JRCsvExporter();
+            exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+            exporter.setExporterOutput(new SimpleWriterExporterOutput(outStream));
+            exporter.exportReport();
+
+            String filePath = "/home/flexabus/Downloads/ExercicoSpring_teste/PDF_Docs/csvDocs/" + UUID.randomUUID().toString() + "_usuarios.csv";
+            JasperExportManager.exportReportToPdfFile(jasperPrint, filePath);
+
+            outStream.flush(); // Isso limpa qualquer buffer de saída pendente.
+            outStream.close(); //  Isso fecha o fluxo de saída.
+
+        } catch (CustomException e) {
+            System.out.println("ERRO NO JASPERSOFT NA CLASSE DE UsuarioController: " + e.getStatus() + " " + e.getMessage());
+        } catch (JRException e) {
+            throw new RuntimeException("Erro no JasperReports: " + e.getMessage(), e);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @RequestMapping(value = "/jasperHTML", method = RequestMethod.GET)
+    public void jasperHTML(HttpServletResponse response){
+        try {
+
+            var findByAllUsers = usuarioFlywayService.findByAll();
+
+            String reportTemplatePath = "/home/flexabus/devel/workspaces/flexabus-external-resources/reports/TESTE/jasperPDF_teste.jrxml";
+            JasperReport jasperReport = JasperCompileManager.compileReport(reportTemplatePath); // Compila o relátorio .jrxml para um binário .jasper
+
+            String contextImage = "/home/flexabus/Imagens/Capturas de tela/Captura de tela de 2023-09-19 10-55-58.png";
+
+            //  Preencher os parâmetros do relatório, se houver
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("tituloRelatorio", "Relatório de Produtos");
+            parameters.put("subTituloRelatorio", "Relatório de Produtos do trabalho spring teste");
+            parameters.put("contextImage", contextImage);
+
+            List<Map<String, Object>> lisMapParamiters = new ArrayList<>();
+            for (UsuarioFlyway usuario : findByAllUsers) {
+                Map<String, Object> parametersMap = new HashMap<>();
+
+                parametersMap.put("nome", usuario.getNome());
+                parametersMap.put("numero", usuario.getNumero());
+                parametersMap.put("email", usuario.getEmail());
+                parametersMap.put("data", usuario.getData());
+                parametersMap.put("usuarioenumtypeenum", usuario.getUsuarioEnumTypeEnum().name());
+
+                lisMapParamiters.add(parametersMap);
+            }
+
+            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(lisMapParamiters);
+
+            // Preencher o relatório com os dados
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+
+            // Exportar o relatório
+
+            // Converter o PDF em HTML usando Flying Saucer (iText Renderer)
+            //            ByteArrayOutputStream htmlStream = new ByteArrayOutputStream();
+            //            ITextRenderer renderer = new ITextRenderer();
+            //            renderer.setDocumentFromString(new String(pdfBytes));
+            //            renderer.layout();
+            //            renderer.createPDF(htmlStream, true);
+
+            response.setContentType("text/html");
+            response.setHeader("Content-Disposition", "inline; filename=relatorio.html");
+
+            OutputStream outStream = response.getOutputStream();
+            HtmlExporter exporter = new HtmlExporter();
+            exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+            exporter.setExporterOutput(new SimpleHtmlExporterOutput(outStream));
+            exporter.exportReport();
+
+            String filePath = "/home/flexabus/Downloads/ExercicoSpring_teste/PDF_Docs/htmlDocs/" + UUID.randomUUID().toString() + "_usuarios.html";
+            JasperExportManager.exportReportToHtmlFile(jasperPrint, filePath);
+
+            // Exportar o relatório para HTML
+            // JasperExportManager.exportReportToHtmlFile(jasperPrint, "/home/flexabus/Downloads/ExercicoSpring_teste/PDF_Docs/htmlDocs/" + UUID.randomUUID().toString() + "_relatorio.html");
+
+            outStream.flush(); // Isso limpa qualquer buffer de saída pendente.
+            outStream.close(); //  Isso fecha o fluxo de saída.
+
+        } catch (CustomException e) {
+            System.out.println("ERRO NO JASPERSOFT NA CLASSE DE UsuarioController: " + e.getStatus() + " " + e.getMessage());
+        } catch (JRException e) {
+            throw new RuntimeException("Erro no JasperReports: " + e.getMessage(), e);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @RequestMapping(value = "/jasperXML", method = RequestMethod.GET)
+    public void jasperXML(HttpServletResponse response){
+        try {
+
+            var findByAllUsers = usuarioFlywayService.findByAll();
+
+            String reportTemplatePath = "/home/flexabus/devel/workspaces/flexabus-external-resources/reports/TESTE/jasperPDF_teste.jrxml";
+            JasperReport jasperReport = JasperCompileManager.compileReport(reportTemplatePath); // Compila o relátorio .jrxml para um binário .jasper
+
+            String contextImage = "/home/flexabus/Imagens/Capturas de tela/Captura de tela de 2023-10-09 08-44-11.png";
+
+            //  Preencher os parâmetros do relatório, se houver
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("tituloRelatorio", "Relatório de Produtos");
+            parameters.put("subTituloRelatorio", "Relatório de Produtos do trabalho spring teste");
+            parameters.put("contextImage", contextImage);
+
+            List<Map<String, Object>> lisMapParamiters = new ArrayList<>();
+            for (UsuarioFlyway usuario : findByAllUsers) {
+                Map<String, Object> parametersMap = new HashMap<>();
+
+                parametersMap.put("nome", usuario.getNome());
+                parametersMap.put("numero", usuario.getNumero());
+                parametersMap.put("email", usuario.getEmail());
+                parametersMap.put("data", usuario.getData());
+                parametersMap.put("usuarioenumtypeenum", usuario.getUsuarioEnumTypeEnum().name());
+
+                lisMapParamiters.add(parametersMap);
+            }
+
+            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(lisMapParamiters);
+
+            // Preencher o relatório com os dados
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+
+            response.setContentType("application/xml"); // Define o tipo de conteúdo para XML
+            response.setHeader("Content-Disposition", "inline; filename=relatorio.xml"); // Define o nome do arquivo como relatorio.xml
+
+            // Exportar o relatório para um fluxo de saída
+            OutputStream outStream = response.getOutputStream();
+            // Crie um exportador para o formato XML (JRXmlExporter)
+            JRXmlExporter exporter = new JRXmlExporter();
+            // Configure o exportador
+            exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+            exporter.setExporterOutput(new SimpleXmlExporterOutput(outStream));
+            // Exporte o relatório
+            exporter.exportReport();
+
+            String filePath = "/home/flexabus/Downloads/ExercicoSpring_teste/PDF_Docs/xmlDocs/" + UUID.randomUUID().toString() + "_usuarios.xml";
+            JasperExportManager.exportReportToXmlFile(jasperPrint, filePath, true);
+
+            outStream.flush(); // Isso limpa qualquer buffer de saída pendente.
+            outStream.close(); //  Isso fecha o fluxo de saída.
+
+        } catch (CustomException e) {
+            System.out.println("ERRO NO JASPERSOFT NA CLASSE DE UsuarioController: " + e.getStatus() + " " + e.getMessage());
+        } catch (JRException e) {
+            throw new RuntimeException("Erro no JasperReports: " + e.getMessage(), e);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

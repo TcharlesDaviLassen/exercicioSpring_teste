@@ -322,3 +322,9 @@ A classe `FileOutputStream` é usada para gravar dados `binários` em um arquivo
 `FileOutputStream` é uma implementação específica de `OutputStream` que lida com a escrita de dados em arquivos.
 
 Em resumo, todas essas classes estão relacionadas à manipulação de dados binários, seja para enviar e receber dados por meio de solicitações HTTP (CloseableHttpClient e CloseableHttpResponse), ler dados de várias fontes (InputStream), ou escrever dados em arquivos no sistema de arquivos (FileOutputStream). Cada classe tem seu propósito e é amplamente usada em diferentes cenários de programação em Java.
+
+#
+#
+
+
+

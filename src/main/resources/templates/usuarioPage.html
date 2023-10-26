@@ -16,7 +16,32 @@
 
                 <a th:href="@{/usuario/jasperPDF}" style="margin-left: 1rem" th:method="get">
                     <button type="submit" class="btn btn-danger">PDF
-                        <i class="fa fa-file-pdf-o" style="color: white"></i>
+                        <i class="fa-solid fa-file-pdf" style="color: white"></i>
+                    </button>
+                </a>
+
+                <a th:href="@{/usuario/jasperEXCEL}" style="margin-left: 1rem" th:method="get">
+                    <button type="submit" class="btn btn-success">EXCEL
+                        <i class="fa fa-file-excel" style="color: white"></i>
+                    </button>
+                </a>
+
+                <a th:href="@{/usuario/jasperCSV}" style="margin-left: 1rem" th:method="get">
+                    <button type="submit" class="btn btn-teal">CSV
+                        <i class="fa fa-solid fa-file-csv" style="color: white"></i>
+
+                    </button>
+                </a>
+
+                <a th:href="@{/usuario/jasperHTML}" style="margin-left: 1rem" th:method="get">
+                    <button type="submit" class="btn btn-ht">HTML
+                        <i class="fa-brands fa-html5"></i>
+                    </button>
+                </a>
+
+                <a th:href="@{/usuario/jasperXML}" style="margin-left: 1rem" th:method="get">
+                    <button type="submit" class="btn btn-xm">XML
+                        <i class="fa fa-file-xml-o" style="color: white"></i>
                     </button>
                 </a>
             </div>

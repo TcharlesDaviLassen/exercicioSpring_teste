@@ -74,7 +74,7 @@ public class ImagemController {
 
             } catch (IOException  e) {
                 e.printStackTrace();
-                model.addAttribute("message", "Erro ao fazer upload das imagens: " + e.getMessage() + " causa: " + e.getCause());
+                model.addAttribute("message", "Erro ao fazer upload das imagens: " + e.getMessage());
                 return "imageUpload";
             }
         }
