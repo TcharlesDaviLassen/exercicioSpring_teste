@@ -2,6 +2,7 @@ package com.example.exercicio.controller;
 
 import com.example.exercicio.DTO.User;
 import com.example.exercicio.DTO.UsuarioDTO;
+import com.example.exercicio.Utils.classUtils.JsonDataSource;
 import com.example.exercicio.entities.*;
 import com.example.exercicio.enumType.UsuarioEnumType;
 import com.example.exercicio.errorsUtils.BusinessException.BusinessException;
@@ -12,6 +13,9 @@ import com.example.exercicio.service.serviceImpl.AddressService;
 import com.example.exercicio.service.serviceImpl.MultiTransactionExampleService;
 import com.example.exercicio.service.serviceImpl.OrderService;
 import com.example.exercicio.service.serviceImpl.UsuarioFlywayServiceImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import net.sf.jasperreports.engine.*;
@@ -21,6 +25,7 @@ import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
 import net.sf.jasperreports.export.*;
 import net.sf.jasperreports.view.JasperViewer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -33,9 +38,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.*;
+import java.sql.Array;
 import java.sql.Connection;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/usuario")

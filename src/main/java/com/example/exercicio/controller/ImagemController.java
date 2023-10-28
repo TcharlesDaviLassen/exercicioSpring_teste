@@ -100,7 +100,6 @@ public class ImagemController {
         }
 
         return "Imagens baixadas e salvas com sucesso no diretório: " + destinationDirectory;
-
     }
 
 

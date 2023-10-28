@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.deser.std.DateDeserializers;
 import com.fasterxml.jackson.databind.ser.std.CalendarSerializer;
 import com.fasterxml.jackson.databind.ser.std.TimeZoneSerializer;
 import jakarta.persistence.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -28,12 +30,13 @@ public class UsuarioFlyway implements Serializable {
     private String email;
     private String data;
 
-    @Column(name = "usuarioEnumTypeEnum", columnDefinition = "string")
-    @Enumerated(EnumType.STRING)
+    @Column(name = "usuarioEnumtypeEnum", columnDefinition = "string")
+    @Enumerated(value = EnumType.STRING)
     private UsuarioEnumType usuarioEnumTypeEnum;
 
     public UsuarioFlyway() {
     }
+
 
     public UsuarioFlyway(Long id, String nome, String numero, String email, String data, UsuarioEnumType usuarioEnumTypeEnum) {
         this.id = id;
@@ -94,10 +97,4 @@ public class UsuarioFlyway implements Serializable {
     public void setUsuarioEnumTypeEnum(UsuarioEnumType usuarioEnumTypeEnum) {
         this.usuarioEnumTypeEnum = usuarioEnumTypeEnum;
     }
-
-    public String getUsuarioEnumAsString(UsuarioEnumType usuarioenum) {
-        return (usuarioenum != null) ? usuarioenum.toString() : "";
-    }
-
 }
-

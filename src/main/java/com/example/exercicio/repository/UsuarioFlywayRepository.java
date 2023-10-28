@@ -24,7 +24,7 @@ public interface UsuarioFlywayRepository extends JpaRepository<UsuarioFlyway, Lo
     List<UsuarioFlyway> findByNomeAndEmail(String nome, String email);
 
 //    @Query(value = "SELECT * FROM usuario_flyway WHERE usuarioEnumTypeEnum = :tipo", nativeQuery = true)
-//    List<UsuarioFlyway> findByUsuarioEnumTypeEnum(@Param("tipo") UsuarioEnumType funcionarioSetor);
-    List<UsuarioFlyway> findByUsuarioEnumTypeEnum(UsuarioEnumType usuarioEnumType);
+//    List<UsuarioFlyway> findByUsuarioEnum(@Param("tipo") UsuarioEnumType funcionarioSetor);
+    List<UsuarioFlyway> findByUsuarioEnum(UsuarioEnumType usuarioEnumType);
 
 }
