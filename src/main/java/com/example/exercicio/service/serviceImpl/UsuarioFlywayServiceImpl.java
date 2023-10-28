@@ -25,6 +25,7 @@ public class UsuarioFlywayServiceImpl implements UsuarioFlywayService {
     private final UsuarioFlywayRepository usuarioRepository;
     private final UsuarioFlywayRepositoryDAOImpl usuarioFlywayRepositoryDAO;
     private final EntityManager entityManager;
+
     @Autowired
     public UsuarioFlywayServiceImpl(UsuarioFlywayRepository usuarioRepository, UsuarioFlywayRepositoryDAOImpl usuarioFlywayRepositoryDAO, EntityManager entityManager) {
         this.usuarioRepository = usuarioRepository;
@@ -49,16 +50,15 @@ public class UsuarioFlywayServiceImpl implements UsuarioFlywayService {
 
         List<UsuarioFlyway> findNomeEmail = usuarioRepository.findAll();
 
-        for (int i = 0; i < findNomeEmail.size() ; i++) {
-            if (usuarioFlyway.getNome().equals(findNomeEmail.get(i).getNome()) || usuarioFlyway.getEmail().equals(findNomeEmail.get(i).getEmail())) {
+        for (int i = 0; i < findNomeEmail.size(); i++) {
+            if (usuarioFlyway.getNome().equals(findNomeEmail.get(i).getNome())
+                    || usuarioFlyway.getEmail().equals(findNomeEmail.get(i).getEmail())) {
                 throw new IllegalArgumentException("Nome e email não podem ser iguais ao que já estão cadastrados");
             }
         }
 
         return usuarioRepository.save(usuarioFlyway);
     }
-
-
 
     @Override
     public UsuarioFlyway salvarUsuarioFlyway(UsuarioFlyway usuarioFlyway) {
@@ -76,25 +76,27 @@ public class UsuarioFlywayServiceImpl implements UsuarioFlywayService {
         String dataFormatada = dateFormat.format(dateGMT);
 
         // Analise a string para criar um objeto Date
-        //  Date date = dateFormat.parse(dataFormatada);
+        // Date date = dateFormat.parse(dataFormatada);
 
-        //        // Crie um objeto Calendar para a data e hora atual
-        //        Calendar calendar = Calendar.getInstance();
+        // // Crie um objeto Calendar para a data e hora atual
+        // Calendar calendar = Calendar.getInstance();
         //
-        //        // Defina o fuso horário desejado (por exemplo, "America/New_York")
-        //        TimeZone timeZone = TimeZone.getTimeZone("America/New_York");
+        // // Defina o fuso horário desejado (por exemplo, "America/New_York")
+        // TimeZone timeZone = TimeZone.getTimeZone("America/New_York");
         //
-        //        // Atribua o fuso horário ao objeto Calendar
-        //        calendar.setTimeZone(timeZone);
+        // // Atribua o fuso horário ao objeto Calendar
+        // calendar.setTimeZone(timeZone);
         //
-        //        // Obtém a data e hora atual com o fuso horário especificado
-        //        Calendar dataComFuso = Calendar.getInstance(timeZone);
+        // // Obtém a data e hora atual com o fuso horário especificado
+        // Calendar dataComFuso = Calendar.getInstance(timeZone);
 
         List<UsuarioFlyway> findNomeEmail = usuarioRepository.findAll();
 
-        for (int i = 0; i < findNomeEmail.size() ; i++) {
-            if (usuarioFlyway.getNome().equals(findNomeEmail.get(i).getNome()) || usuarioFlyway.getEmail().equals(findNomeEmail.get(i).getEmail())) {
-                throw new CustomException("Nome e email não podem ser iguais ao que já estão cadastrados", HttpStatus.CONFLICT);
+        for (int i = 0; i < findNomeEmail.size(); i++) {
+            if (usuarioFlyway.getNome().equals(findNomeEmail.get(i).getNome())
+                    || usuarioFlyway.getEmail().equals(findNomeEmail.get(i).getEmail())) {
+                throw new CustomException("Nome e email não podem ser iguais ao que já estão cadastrados",
+                        HttpStatus.CONFLICT);
             }
         }
 
@@ -117,14 +119,13 @@ public class UsuarioFlywayServiceImpl implements UsuarioFlywayService {
             findUser.get().setNumero(usuarioFlyway.getNumero());
             findUser.get().setEmail(usuarioFlyway.getEmail());
             // findUser.get().setData(usuarioFlyway.getData());
-            findUser.get().setUsuarioEnumTypeEnum(usuarioFlyway.getUsuarioEnumTypeEnum());
+            findUser.get().setUsuarioEnum(usuarioFlyway.getUsuarioEnum());
 
             return usuarioRepository.save(findUser.get());
         }
 
         return null;
     }
-
 
     @Override
     public void deleteUser(Long id) {
@@ -137,7 +138,7 @@ public class UsuarioFlywayServiceImpl implements UsuarioFlywayService {
 
     @Override
     public List<UsuarioFlyway> findByEnum(UsuarioEnumType usuarioFlyway) {
-        return usuarioRepository.findByUsuarioEnumTypeEnum(usuarioFlyway);
+        return usuarioRepository.findByUsuarioEnum(usuarioFlyway);
     }
 
     @Override
@@ -161,7 +162,7 @@ public class UsuarioFlywayServiceImpl implements UsuarioFlywayService {
     }
 
     public List<UsuarioFlyway> filtrarUsuariosType(UsuarioEnumType enumType) {
-        return usuarioRepository.findByUsuarioEnumTypeEnum(enumType);
+        return usuarioRepository.findByUsuarioEnum(enumType);
     }
 
     public List<UsuarioFlyway> filtrarUsuarios(UsuarioFlyway filtro) {
@@ -173,10 +174,17 @@ public class UsuarioFlywayServiceImpl implements UsuarioFlywayService {
         return usuarioRepository.findByNomeAndEmail(nome, email);
     }
 
-
     public List<String> getEnumListFromDatabase() {
         // Substitua "UsuarioEntity" pelo nome da sua entidade que contém a enumeração.
-        String sql = "SELECT DISTINCT usuario_enum_type_enum FROM usuario_flyway";
+        String sql = "SELECT  " +
+                // "        u1_0.id,\n" +
+                // "        u1_0.data,\n" +
+                // "        u1_0.email,\n" +
+                // "        u1_0.nome,\n" +
+                // "        u1_0.numero,\n" +
+                "        u1_0.usuario_enum \n" +
+                "        from\n" +
+                "        usuario_flyway u1_0";
 
         Query query = entityManager.createNativeQuery(sql);
         List<String> enumNames = query.getResultList();

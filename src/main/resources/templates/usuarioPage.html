@@ -31,7 +31,7 @@
                         <th class="thInput"><input type="text" class="filtroInput" id="filtroEmail" placeholder="Filtrar por email"></th>
                         <th class="thInput"><input type="text" class="filtroInput" id="filtroData" placeholder="Filtrar por data"></th>
                         <th class="thInput" th:object="${usuarioCreate}">
-                            <select class="filtroInput" id="filtroTipo" th:field="*{usuarioEnumTypeEnum}">
+                            <select class="filtroInput" id="filtroTipo" th:field="*{usuarioEnum}">
                                 <option value=""></option>
                                 <option th:each="state : ${T(com.example.exercicio.enumType.UsuarioEnumType).values()}"
                                         th:value="${state.name()}"
@@ -47,7 +47,7 @@
                         <td th:text="${func.numero}"></td>
                         <td th:text="${func.email}"></td>
                         <td th:text="${func.data}"></td>
-                        <td class="tipo" th:text="${func.usuarioEnumTypeEnum}"></td>
+                        <td class="tipo" th:text="${func.usuarioEnum}"></td>
                         <td class="buttons">
                             <a id="idUserEdit" th:data-idUserEditData="@{(${func.id})}" th:href="@{/usuario/edit/{id}(id=${func.id})}"
                                method="get"

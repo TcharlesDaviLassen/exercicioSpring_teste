@@ -82,9 +82,9 @@ public class UsuarioFlywayRepositoryDAOImpl {
             parametros.put("data", "%" + filtro.getData() + "%");
         }
 
-        if (filtro.getUsuarioEnumTypeEnum() != null && !filtro.getUsuarioEnumTypeEnum().name().isEmpty()) {
+        if (filtro.getUsuarioEnum() != null && !filtro.getUsuarioEnum().name().isEmpty()) {
             queryBuilder.append(" AND u.usuarioEnumTypeEnum ILIKE :usuarioEnumTypeEnum");
-            parametros.put("usuarioEnumTypeEnum", "%" + filtro.getUsuarioEnumTypeEnum() + "%" );
+            parametros.put("usuarioEnumTypeEnum", "%" + filtro.getUsuarioEnum() + "%" );
         }
 
         TypedQuery<UsuarioFlyway> query = entityManager.createQuery(queryBuilder.toString(), UsuarioFlyway.class);

@@ -38,22 +38,9 @@ public class ImagemController {
                 return "Erro ao fazer upload das imagens: " + e.getMessage();
             }
         }
-
         return "Imagens salvas com sucesso.";
-
-        //        Images imagem = new Images();
-        //        imagem.setNome(file.getName());
-        //        imagem.setDados(file.getBytes());
-        //        imagemRepository.save(imagem);
-        //
-        //        // Aqui você pode copiar a imagem para o servidor
-        //        // Por simplicidade, estou apenas retornando a ID da imagem
-        //
-        //
-        //        return "Imagem salva com sucesso. ID: " + imagem.getId();
     }
 
-    //    @GetMapping("/download/{id}")
     @PostMapping("/downloadImagem")
     public String downloadImagem(@RequestBody ImagesDownloadRequestDTO imagesDownloadRequestDTO) {
         Long id = imagesDownloadRequestDTO.getId();
@@ -71,7 +58,6 @@ public class ImagemController {
         }
 
         return "Imagens baixadas e salvas com sucesso no diretório: " + destinationDirectory;
-
     }
 
 
@@ -92,6 +78,7 @@ public class ImagemController {
                 }
             }
         }
+
         return "Imagens baixadas e salvas com sucesso no diretório: " + destinationDirectory;
     }
 

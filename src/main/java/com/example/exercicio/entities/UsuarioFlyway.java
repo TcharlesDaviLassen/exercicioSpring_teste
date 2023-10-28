@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.deser.std.DateDeserializers;
 import com.fasterxml.jackson.databind.ser.std.CalendarSerializer;
 import com.fasterxml.jackson.databind.ser.std.TimeZoneSerializer;
 import jakarta.persistence.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -28,21 +30,22 @@ public class UsuarioFlyway implements Serializable {
     private String email;
     private String data;
 
-    @Column(name = "usuario_enum_type_enum", columnDefinition = "char")
+
+    @Column(name="usuario_enum",columnDefinition = "char")
     @Enumerated(value = EnumType.STRING)
-    private UsuarioEnumType usuarioEnumTypeEnum;
+    private UsuarioEnumType usuarioEnum;
 
     public UsuarioFlyway() {
     }
 
 
-    public UsuarioFlyway(Long id, String nome, String numero, String email, String data, UsuarioEnumType usuarioEnumTypeEnum) {
+    public UsuarioFlyway(Long id, String nome, String numero, String email, String data, UsuarioEnumType usuarioEnum) {
         this.id = id;
         this.nome = nome;
         this.numero = numero;
         this.email = email;
         this.data = data;
-        this.usuarioEnumTypeEnum = usuarioEnumTypeEnum;
+        this.usuarioEnum = usuarioEnum;
     }
 
     public Long getId() {
@@ -88,11 +91,20 @@ public class UsuarioFlyway implements Serializable {
         this.data = data;
     }
 
-    public UsuarioEnumType getUsuarioEnumTypeEnum() {
-        return usuarioEnumTypeEnum;
+//    public UsuarioEnumType getUsuarioEnumTypeEnum() {
+//        return usuarioEnumTypeEnum;
+//    }
+//
+//    public void setUsuarioEnumTypeEnum(UsuarioEnumType usuarioEnumTypeEnum) {
+//        this.usuarioEnumTypeEnum = usuarioEnumTypeEnum;
+//    }
+
+
+    public UsuarioEnumType getUsuarioEnum() {
+        return usuarioEnum;
     }
 
-    public void setUsuarioEnumTypeEnum(UsuarioEnumType usuarioEnumTypeEnum) {
-        this.usuarioEnumTypeEnum = usuarioEnumTypeEnum;
+    public void setUsuarioEnum(UsuarioEnumType usuarioEnum) {
+        this.usuarioEnum = usuarioEnum;
     }
 }
