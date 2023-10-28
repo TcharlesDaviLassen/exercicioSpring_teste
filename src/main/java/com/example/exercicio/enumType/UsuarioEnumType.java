@@ -12,11 +12,11 @@ import java.io.IOException;
 //@JsonDeserialize(using = UsuarioEnumTypeDeserializer.class)
 public enum UsuarioEnumType implements RequireTypes {
 
-    // NOME("N", "NOME"),
-    // EMAIL("E", "EMAIL");
+     NOME("N", "NOME"),
+     EMAIL("E", "EMAIL");
 
-    N("N", "NOME"),
-    E("E", "EMAIL");
+//    N("N", "NOME"),
+//    E("E", "EMAIL");
 
     private String id;
     private String description;

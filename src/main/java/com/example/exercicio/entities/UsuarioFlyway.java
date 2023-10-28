@@ -30,22 +30,21 @@ public class UsuarioFlyway implements Serializable {
     private String email;
     private String data;
 
-
-    @Column(name="usuario_enum",columnDefinition = "char")
+    @Column(name = "usuarioEnumtypeEnum", columnDefinition = "string")
     @Enumerated(value = EnumType.STRING)
-    private UsuarioEnumType usuarioEnum;
+    private UsuarioEnumType usuarioEnumTypeEnum;
 
     public UsuarioFlyway() {
     }
 
 
-    public UsuarioFlyway(Long id, String nome, String numero, String email, String data, UsuarioEnumType usuarioEnum) {
+    public UsuarioFlyway(Long id, String nome, String numero, String email, String data, UsuarioEnumType usuarioEnumTypeEnum) {
         this.id = id;
         this.nome = nome;
         this.numero = numero;
         this.email = email;
         this.data = data;
-        this.usuarioEnum = usuarioEnum;
+        this.usuarioEnumTypeEnum = usuarioEnumTypeEnum;
     }
 
     public Long getId() {
@@ -91,20 +90,11 @@ public class UsuarioFlyway implements Serializable {
         this.data = data;
     }
 
-//    public UsuarioEnumType getUsuarioEnumTypeEnum() {
-//        return usuarioEnumTypeEnum;
-//    }
-//
-//    public void setUsuarioEnumTypeEnum(UsuarioEnumType usuarioEnumTypeEnum) {
-//        this.usuarioEnumTypeEnum = usuarioEnumTypeEnum;
-//    }
-
-
-    public UsuarioEnumType getUsuarioEnum() {
-        return usuarioEnum;
+    public UsuarioEnumType getUsuarioEnumTypeEnum() {
+        return usuarioEnumTypeEnum;
     }
 
-    public void setUsuarioEnum(UsuarioEnumType usuarioEnum) {
-        this.usuarioEnum = usuarioEnum;
+    public void setUsuarioEnumTypeEnum(UsuarioEnumType usuarioEnumTypeEnum) {
+        this.usuarioEnumTypeEnum = usuarioEnumTypeEnum;
     }
 }
