@@ -151,7 +151,6 @@ public class UsuarioController {
 
 
 
-
     // Teste transaction
     @Autowired
     private MultiTransactionExampleService multiTransactionExampleService;
